@@ -1,0 +1,133 @@
+﻿@model ProjectManagement.Models.Consultant
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Consultant</h4>
+<hr />
+<div class="row">
+   
+        <form asp-action="Create">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecruiterMemberId" class="control-label"></label>
+                <select asp-for="RecruiterMemberId" class="form-select" asp-items="ViewBag.RecruiterMemberId">
+                    <option>Please Select</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamLeadMemberId" class="control-label"></label>
+                <select asp-for="TeamLeadMemberId" class="form-select" asp-items="ViewBag.TeamLeadMemberId">
+                    <option>Please Select</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarketingManagerMemberId" class="control-label"></label>
+                <select asp-for="MarketingManagerMemberId" class="form-select" asp-items="ViewBag.MarketingManagerMemberId">
+                    <option>Please Select</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamMemberId" class="control-label"></label>
+                <select asp-for="TeamMemberId" class="form-select" asp-items="ViewBag.TeamMemberId">
+                    <option>Please Select</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReferredByMemberId" class="control-label"></label>
+                <select asp-for="ReferredByMemberId" class="form-select" asp-items="ViewBag.ReferredByMemberId">
+                    <option>Please Select</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlacedByMemberId" class="control-label"></label>
+                <select asp-for="PlacedByMemberId" class="form-select" asp-items="ViewBag.PlacedByMemberId">
+                    <option>Please Select</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillingRate" class="control-label"></label>
+                <input asp-for="BillingRate" class="form-control" />
+                <span asp-validation-for="BillingRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayRate" class="control-label"></label>
+                <input asp-for="PayRate" class="form-control" />
+                <span asp-validation-for="PayRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamLeadFee" class="control-label"></label>
+                <input asp-for="TeamLeadFee" class="form-control" />
+                <span asp-validation-for="TeamLeadFee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarketingFee" class="control-label"></label>
+                <input asp-for="MarketingFee" class="form-control" />
+                <span asp-validation-for="MarketingFee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReferralFees" class="control-label"></label>
+                <input asp-for="ReferralFees" class="form-control" />
+                <span asp-validation-for="ReferralFees" class="text-danger"></span>
+            </div>
+            </div>
+        <div class="form-group">
+            @*<label asp-for="PlacementFee" class="control-label"></label>
+            <input asp-for="PlacementFee" class="form-control" />
+            <span asp-validation-for="PlacementFee" class="text-danger"></span>*@
+            <div class="input-group mb-3">
+            <span class="input-group-text">PlacementFee</span>
+            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+            <span class="input-group-text">$</span>
+            </div>
+            <label asp-for="PlacedByMemberId" class="control-label"></label>
+            <select asp-for="PlacedByMemberId" class="form-select" asp-items="ViewBag.PlacedByMemberId">
+                <option>Please Select</option>
+            </select>
+        </div>
+    <div class="col-md-4">
+            
+            <div class="form-group">
+                <label asp-for="CreditCardCost" class="control-label"></label>
+                <input asp-for="CreditCardCost" class="form-control" />
+                <span asp-validation-for="CreditCardCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NetMargin" class="control-label"></label>
+                <input asp-for="NetMargin" class="form-control" />
+                <span asp-validation-for="NetMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+        </form>
+    </div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

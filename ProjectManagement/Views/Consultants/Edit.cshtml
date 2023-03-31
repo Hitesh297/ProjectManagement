@@ -1,0 +1,114 @@
+﻿@model ProjectManagement.Models.Consultant
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Consultant</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecruiterMemberId" class="control-label"></label>
+                <select asp-for="RecruiterMemberId" class="form-control" asp-items="ViewBag.RecruiterMemberId"></select>
+                <span asp-validation-for="RecruiterMemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamLeadMemberId" class="control-label"></label>
+                <select asp-for="TeamLeadMemberId" class="form-control" asp-items="ViewBag.TeamLeadMemberId"></select>
+                <span asp-validation-for="TeamLeadMemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarketingManagerMemberId" class="control-label"></label>
+                <select asp-for="MarketingManagerMemberId" class="form-control" asp-items="ViewBag.MarketingManagerMemberId"></select>
+                <span asp-validation-for="MarketingManagerMemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamMemberId" class="control-label"></label>
+                <select asp-for="TeamMemberId" class="form-control" asp-items="ViewBag.TeamMemberId"></select>
+                <span asp-validation-for="TeamMemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReferredByMemberId" class="control-label"></label>
+                <select asp-for="ReferredByMemberId" class="form-control" asp-items="ViewBag.ReferredByMemberId"></select>
+                <span asp-validation-for="ReferredByMemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlacedByMemberId" class="control-label"></label>
+                <select asp-for="PlacedByMemberId" class="form-control" asp-items="ViewBag.PlacedByMemberId"></select>
+                <span asp-validation-for="PlacedByMemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillingRate" class="control-label"></label>
+                <input asp-for="BillingRate" class="form-control" />
+                <span asp-validation-for="BillingRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayRate" class="control-label"></label>
+                <input asp-for="PayRate" class="form-control" />
+                <span asp-validation-for="PayRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamLeadFee" class="control-label"></label>
+                <input asp-for="TeamLeadFee" class="form-control" />
+                <span asp-validation-for="TeamLeadFee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarketingFee" class="control-label"></label>
+                <input asp-for="MarketingFee" class="form-control" />
+                <span asp-validation-for="MarketingFee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReferralFees" class="control-label"></label>
+                <input asp-for="ReferralFees" class="form-control" />
+                <span asp-validation-for="ReferralFees" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlacementFee" class="control-label"></label>
+                <input asp-for="PlacementFee" class="form-control" />
+                <span asp-validation-for="PlacementFee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreditCardCost" class="control-label"></label>
+                <input asp-for="CreditCardCost" class="form-control" />
+                <span asp-validation-for="CreditCardCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NetMargin" class="control-label"></label>
+                <input asp-for="NetMargin" class="form-control" />
+                <span asp-validation-for="NetMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
