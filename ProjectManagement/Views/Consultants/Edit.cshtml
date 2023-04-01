@@ -18,6 +18,13 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="UniqueConsultantId" class="control-label"></label>
+                <input asp-for="UniqueConsultantId" class="form-control" />
+                <span asp-validation-for="UniqueConsultantId" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="RecruiterMemberId" class="control-label"></label>
                 <select asp-for="RecruiterMemberId" class="form-control" asp-items="ViewBag.RecruiterMemberId"></select>
@@ -38,6 +45,13 @@
                 <select asp-for="TeamMemberId" class="form-control" asp-items="ViewBag.TeamMemberId"></select>
                 <span asp-validation-for="TeamMemberId" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label"></label>
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="ReferredByMemberId" class="control-label"></label>
                 <select asp-for="ReferredByMemberId" class="form-control" asp-items="ViewBag.ReferredByMemberId"></select>

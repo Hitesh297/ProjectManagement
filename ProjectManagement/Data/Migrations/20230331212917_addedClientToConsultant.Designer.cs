@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.Data;
 
@@ -11,9 +12,10 @@ using ProjectManagement.Data;
 namespace ProjectManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230331212917_addedClientToConsultant")]
+    partial class addedClientToConsultant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,7 +243,7 @@ namespace ProjectManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Client");
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("ProjectManagement.Models.Consultant", b =>
@@ -352,63 +354,6 @@ namespace ProjectManagement.Data.Migrations
                     b.ToTable("TeamMembers");
                 });
 
-            modelBuilder.Entity("ProjectManagement.Models.TimeSheet", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal?>("AprBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("AugBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ConsultantId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("DecBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("FebBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("JanBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("JulBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("JunBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("MarBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("MayBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("NovBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("OctBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("SepBilling")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConsultantId");
-
-                    b.ToTable("Timesheets");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -503,15 +448,6 @@ namespace ProjectManagement.Data.Migrations
                     b.Navigation("TeamLead");
 
                     b.Navigation("TeamMember");
-                });
-
-            modelBuilder.Entity("ProjectManagement.Models.TimeSheet", b =>
-                {
-                    b.HasOne("ProjectManagement.Models.Consultant", "Consultant")
-                        .WithMany()
-                        .HasForeignKey("ConsultantId");
-
-                    b.Navigation("Consultant");
                 });
 
             modelBuilder.Entity("ProjectManagement.Models.TeamMember", b =>

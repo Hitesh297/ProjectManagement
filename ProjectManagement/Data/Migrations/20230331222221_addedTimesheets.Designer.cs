@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.Data;
 
@@ -11,9 +12,10 @@ using ProjectManagement.Data;
 namespace ProjectManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230331222221_addedTimesheets")]
+    partial class addedTimesheets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -360,43 +362,43 @@ namespace ProjectManagement.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal?>("AprBilling")
+                    b.Property<decimal>("AprBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("AugBilling")
+                    b.Property<decimal>("AugBilling")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ConsultantId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("DecBilling")
+                    b.Property<decimal>("DecBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("FebBilling")
+                    b.Property<decimal>("FebBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("JanBilling")
+                    b.Property<decimal>("JanBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("JulBilling")
+                    b.Property<decimal>("JulBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("JunBilling")
+                    b.Property<decimal>("JunBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("MarBilling")
+                    b.Property<decimal>("MarBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("MayBilling")
+                    b.Property<decimal>("MayBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("NovBilling")
+                    b.Property<decimal>("NovBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("OctBilling")
+                    b.Property<decimal>("OctBilling")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("SepBilling")
+                    b.Property<decimal>("SepBilling")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Year")

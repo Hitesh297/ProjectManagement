@@ -1,0 +1,99 @@
+﻿@model ProjectManagement.Models.TimeSheet
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TimeSheet</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="ConsultantId" class="control-label"></label>
+                <select asp-for="ConsultantId" class="form-control" asp-items="ViewBag.ConsultantId"></select>
+                <span asp-validation-for="ConsultantId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JanBilling" class="control-label"></label>
+                <input asp-for="JanBilling" class="form-control" />
+                <span asp-validation-for="JanBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FebBilling" class="control-label"></label>
+                <input asp-for="FebBilling" class="form-control" />
+                <span asp-validation-for="FebBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarBilling" class="control-label"></label>
+                <input asp-for="MarBilling" class="form-control" />
+                <span asp-validation-for="MarBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AprBilling" class="control-label"></label>
+                <input asp-for="AprBilling" class="form-control" />
+                <span asp-validation-for="AprBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MayBilling" class="control-label"></label>
+                <input asp-for="MayBilling" class="form-control" />
+                <span asp-validation-for="MayBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JunBilling" class="control-label"></label>
+                <input asp-for="JunBilling" class="form-control" />
+                <span asp-validation-for="JunBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JulBilling" class="control-label"></label>
+                <input asp-for="JulBilling" class="form-control" />
+                <span asp-validation-for="JulBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AugBilling" class="control-label"></label>
+                <input asp-for="AugBilling" class="form-control" />
+                <span asp-validation-for="AugBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SepBilling" class="control-label"></label>
+                <input asp-for="SepBilling" class="form-control" />
+                <span asp-validation-for="SepBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OctBilling" class="control-label"></label>
+                <input asp-for="OctBilling" class="form-control" />
+                <span asp-validation-for="OctBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NovBilling" class="control-label"></label>
+                <input asp-for="NovBilling" class="form-control" />
+                <span asp-validation-for="NovBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DecBilling" class="control-label"></label>
+                <input asp-for="DecBilling" class="form-control" />
+                <span asp-validation-for="DecBilling" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

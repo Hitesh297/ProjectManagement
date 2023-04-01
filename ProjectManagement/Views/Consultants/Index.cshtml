@@ -9,6 +9,20 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form action="/Consultants/Index" method="GET">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">
+                <input style="width:100%" class="form-control" type="text" name="searchKey" autocomplete="off" />
+            </div>
+            <div class="col-md-2">
+                <input style="width:100%" class="btn btn-primary" type="submit" value="Search" />
+            </div>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -16,53 +30,9 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Recruiter)
+                @Html.DisplayNameFor(model => model.Client)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TeamLead)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TeamMember)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BillingRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PayRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TeamLeadFee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MarketingFee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MarketingManager)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReferralFees)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReferredBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlacementFee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlacedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreditCardCost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NetMargin)
-            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -72,54 +42,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Recruiter.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeamLead.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeamMember.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BillingRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeamLeadFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MarketingFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MarketingManager.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReferralFees)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReferredBy.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlacementFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlacedBy.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreditCardCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetMargin)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.ClientName)
+                </td>
+            
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

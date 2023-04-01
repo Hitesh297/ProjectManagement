@@ -5,6 +5,7 @@ namespace ProjectManagement.Models
     public class Consultant
     {
         public int Id { get; set; }
+        public string UniqueConsultantId { get; set; }
         public string Name { get; set; }
         [ForeignKey("Recruiter"), Column(Order = 0)]
         public int? RecruiterMemberId { get; set; }
@@ -41,6 +42,9 @@ namespace ProjectManagement.Models
 
 
         //client
+        [ForeignKey("Client")]
+        public int? ClientId { get; set; }
+        public virtual Client? Client { get; set; }
         public TeamMember? TeamMember { get; set; }
         public decimal BillingRate { get; set; }
         public decimal PayRate { get; set; }

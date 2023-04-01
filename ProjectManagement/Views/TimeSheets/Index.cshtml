@@ -1,0 +1,152 @@
+﻿@model IEnumerable<ProjectManagement.Models.TimeSheet>
+
+@{
+    ViewData["Title"] = "Index";
+    List<int> yearDropdown = new List<int>();
+    for (int i = 2000; i < 2200; i++)
+    {
+        yearDropdown.Add(i);
+    }
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form action="/TimeSheets/Index" method="GET">
+    <div class="row">
+        <div class="col">
+            <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Year</span>
+            <select name="consultantId" class="form-select" asp-items="ViewBag.ConsultantId">
+                <option value="0">Please Select</option>
+            </select>
+</div>
+        </div>
+        <div class="col">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Year</span>
+                <select name="year" class="form-select">
+                    <option>Please Select</option>
+                    @foreach (var year in yearDropdown)
+                    {
+                        <option>@year</option>
+                    }
+
+                </select>
+            </div>
+        </div>
+       
+        <div class="col">
+
+            <input style="width:100%" class="btn btn-primary" type="submit" value="Search" />
+
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered border-primary">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Consultant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JanBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FebBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MarBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AprBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MayBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JunBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JulBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AugBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SepBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OctBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NovBilling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DecBilling)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consultant.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.JanBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.FebBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.MarBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.AprBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.MayBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.JunBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.JulBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.AugBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.SepBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.OctBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.NovBilling)
+                </td>
+                <td>
+                    $ @Html.DisplayFor(modelItem => item.DecBilling)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

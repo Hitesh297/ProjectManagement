@@ -20,9 +20,19 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Consultants
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchKey = null)
         {
-            var applicationDbContext = _context.Consultants.Include(c => c.MarketingManager).Include(c => c.PlacedBy).Include(c => c.Recruiter).Include(c => c.ReferredBy).Include(c => c.TeamLead).Include(c => c.TeamMember);
+            string url = string.Empty;
+            IQueryable<Consultant> applicationDbContext = null ;
+            if (!string.IsNullOrWhiteSpace(searchKey))
+            {
+                applicationDbContext = _context.Consultants.Include(t=>t.Client).Where(x => x.Name.ToLower().Contains(searchKey.ToLower()) || x.Client.ClientName.ToLower().Contains(searchKey.ToLower()));
+            }
+            else
+            {
+                applicationDbContext = _context.Consultants.Include(t => t.Client);
+            }
+            
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -41,6 +51,7 @@ namespace ProjectManagement.Controllers
                 .Include(c => c.ReferredBy)
                 .Include(c => c.TeamLead)
                 .Include(c => c.TeamMember)
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (consultant == null)
             {
@@ -60,6 +71,7 @@ namespace ProjectManagement.Controllers
             ViewData["ReferredByMemberId"] = selectListItems;
             ViewData["TeamLeadMemberId"] = selectListItems;
             ViewData["TeamMemberId"] = selectListItems;
+            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName");
             return View();
         }
 
@@ -68,7 +80,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin")] Consultant consultant)
+        public async Task<IActionResult> Create([Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin,UniqueConsultantId,ClientId")] Consultant consultant)
         {
             if (ModelState.IsValid)
             {
@@ -82,6 +94,7 @@ namespace ProjectManagement.Controllers
             ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
             ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_context.TeamMembers, "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
@@ -104,6 +117,7 @@ namespace ProjectManagement.Controllers
             ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
             ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
@@ -112,7 +126,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin")] Consultant consultant)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin,UniqueConsultantId,ClientId")] Consultant consultant)
         {
             if (id != consultant.Id)
             {
@@ -145,6 +159,7 @@ namespace ProjectManagement.Controllers
             ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
             ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
@@ -163,6 +178,7 @@ namespace ProjectManagement.Controllers
                 .Include(c => c.ReferredBy)
                 .Include(c => c.TeamLead)
                 .Include(c => c.TeamMember)
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (consultant == null)
             {
