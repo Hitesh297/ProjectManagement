@@ -58,7 +58,7 @@ namespace ProjectManagement.Controllers
         // GET: TimeSheets/Create
         public IActionResult Create()
         {
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Id");
+            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name");
             return View();
         }
 
@@ -75,7 +75,7 @@ namespace ProjectManagement.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Id", timeSheet.ConsultantId);
+            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
             return View(timeSheet);
         }
 
@@ -92,7 +92,7 @@ namespace ProjectManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Id", timeSheet.ConsultantId);
+            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
             return View(timeSheet);
         }
 
@@ -128,7 +128,7 @@ namespace ProjectManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Id", timeSheet.ConsultantId);
+            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
             return View(timeSheet);
         }
 

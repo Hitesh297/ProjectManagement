@@ -9,15 +9,15 @@ namespace ProjectManagement.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Consultants_Appointments_ClientId",
+                name: "FK_Consultants_Clients_ClientId",
                 table: "Consultants");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_Appointments",
-                table: "Appointments");
+                name: "PK_Clients",
+                table: "Clients");
 
             migrationBuilder.RenameTable(
-                name: "Appointments",
+                name: "Clients",
                 newName: "Client");
 
             migrationBuilder.AddPrimaryKey(
@@ -45,18 +45,18 @@ namespace ProjectManagement.Data.Migrations
 
             migrationBuilder.RenameTable(
                 name: "Client",
-                newName: "Appointments");
+                newName: "Clients");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_Appointments",
-                table: "Appointments",
+                name: "PK_Clients",
+                table: "Clients",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Consultants_Appointments_ClientId",
+                name: "FK_Consultants_Clients_ClientId",
                 table: "Consultants",
                 column: "ClientId",
-                principalTable: "Appointments",
+                principalTable: "Clients",
                 principalColumn: "Id");
         }
     }

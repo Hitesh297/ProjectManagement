@@ -22,20 +22,20 @@ namespace ProjectManagement.Controllers
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-              return _context.Appointments != null ? 
-                          View(await _context.Appointments.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Appointments'  is null.");
+              return _context.Clients != null ? 
+                          View(await _context.Clients.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Clients'  is null.");
         }
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Appointments == null)
+            if (id == null || _context.Clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Appointments
+            var client = await _context.Clients
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
             {
@@ -70,12 +70,12 @@ namespace ProjectManagement.Controllers
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Appointments == null)
+            if (id == null || _context.Clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Appointments.FindAsync(id);
+            var client = await _context.Clients.FindAsync(id);
             if (client == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace ProjectManagement.Controllers
         // GET: Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Appointments == null)
+            if (id == null || _context.Clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Appointments
+            var client = await _context.Clients
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
             {
@@ -141,14 +141,14 @@ namespace ProjectManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Appointments == null)
+            if (_context.Clients == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Appointments'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Clients'  is null.");
             }
-            var client = await _context.Appointments.FindAsync(id);
+            var client = await _context.Clients.FindAsync(id);
             if (client != null)
             {
-                _context.Appointments.Remove(client);
+                _context.Clients.Remove(client);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace ProjectManagement.Controllers
 
         private bool ClientExists(int id)
         {
-          return (_context.Appointments?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -20,17 +20,17 @@ namespace ProjectManagement.Data.Migrations
                 column: "ClientId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Consultants_Appointments_ClientId",
+                name: "FK_Consultants_Clients_ClientId",
                 table: "Consultants",
                 column: "ClientId",
-                principalTable: "Appointments",
+                principalTable: "Clients",
                 principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Consultants_Appointments_ClientId",
+                name: "FK_Consultants_Clients_ClientId",
                 table: "Consultants");
 
             migrationBuilder.DropIndex(

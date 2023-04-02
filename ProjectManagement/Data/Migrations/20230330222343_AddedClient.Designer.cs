@@ -243,7 +243,7 @@ namespace ProjectManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

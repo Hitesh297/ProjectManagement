@@ -7,6 +7,7 @@ namespace ProjectManagement.Models
     public class TimeSheet
     {
         public int Id { get; set; }
+        [Display(Name = "Consultant")]
         [ForeignKey("Consultant")]
         public int? ConsultantId { get; set; }
         public virtual Consultant? Consultant { get; set; }
