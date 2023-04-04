@@ -1,12 +1,12 @@
-﻿@model IEnumerable<ProjectManagement.Models.TimeSheet>
+﻿@model List<ProjectManagement.Models.TimeSheet>
 
 @{
     ViewData["Title"] = "Index";
-    List<int> yearDropdown = new List<int>();
-    for (int i = 2000; i < 2200; i++)
-    {
-        yearDropdown.Add(i);
-    }
+    //List<int> yearDropdown = new List<int>();
+    //for (int i = 2000; i < 2200; i++)
+    //{
+    //    yearDropdown.Add(i);
+    //}
 }
 
 <h1>Index</h1>
@@ -28,12 +28,12 @@
         <div class="col">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Year</span>
-                <select name="year" class="form-select">
-                    <option>Please Select</option>
-                    @foreach (var year in yearDropdown)
+                <select name="year" class="form-select" asp-items="ViewBag.Year">
+                    <option value="-1">All</option>
+                    @*@foreach (var year in yearDropdown)
                     {
                         <option>@year</option>
-                    }
+                    }*@
 
                 </select>
             </div>
@@ -49,98 +49,82 @@
 
 <table class="table overflow-auto table-bordered border-primary">
     <thead>
+        @foreach (TimeSheet item in Model)
+        {  
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Consultant)
+                @*@item.ConsultantId*@
+                Consultant
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                @*@item.Year*@
+                Year
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JanBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FebBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MarBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AprBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MayBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JunBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JulBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AugBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SepBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OctBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NovBilling)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DecBilling)
-            </th>
+
+                @foreach (MonthData md in item.MonthData)
+                {
+                <th>
+                        @md.Month
+                </th>
+            } 
             <th></th>
         </tr>
+        }
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (TimeSheet item in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Consultant.Name)
+                    @*@Html.DisplayFor(modelItem => item.Consultant.Name)*@
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Year)
+                    @item.Year
                 </td>
-                <td style="white-space:nowrap" >
-                   $ @Html.DisplayFor(modelItem => item.JanBilling)
-                </td>
-                <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.FebBilling)
-                </td>
-                <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.MarBilling)
-                </td>
-                <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.AprBilling)
-                </td>
-                <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.MayBilling)
-                </td>
-                <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.JunBilling)
+
+              @foreach (MonthData md  in item.MonthData)
+                {
+                    <td style="white-space:nowrap">
+                        @*@Html.DisplayFor(modelItem => item.Hours)*@
+                        @md.Hours
+                    </td>
+                }
+                   
+                
+                
+                @*<td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.FebBilling)
                 </td>
                 <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.JulBilling)
+                    @Html.DisplayFor(modelItem => item.MarBilling)
                 </td>
                 <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.AugBilling)
+                    @Html.DisplayFor(modelItem => item.AprBilling)
                 </td>
                 <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.SepBilling)
+                    @Html.DisplayFor(modelItem => item.MayBilling)
                 </td>
                 <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.OctBilling)
+                    @Html.DisplayFor(modelItem => item.JunBilling)
                 </td>
                 <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.NovBilling)
+                    @Html.DisplayFor(modelItem => item.JulBilling)
                 </td>
                 <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.DecBilling)
+                    @Html.DisplayFor(modelItem => item.AugBilling)
                 </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.SepBilling)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.OctBilling)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.NovBilling)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.DecBilling)
+                </td>*@
                 <td style="white-space:nowrap">
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                    @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@

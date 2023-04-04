@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
 using ProjectManagement.Models;
+using ProjectManagement.Models.ViewModels;
 
 namespace ProjectManagement.Controllers
 {
@@ -28,12 +30,23 @@ namespace ProjectManagement.Controllers
             {
                 applicationDbContext = applicationDbContext.Where(x => x.Consultant.Id == consultantId);
             }
-            if (year != 0)
+
+            if (year != -1)
             {
+                if (year == 0)
+                {
+                    year = DateTime.Now.Year;
+                }
                 applicationDbContext = applicationDbContext.Where(x => x.Year == year);
             }
+            
             ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", consultantId);
-            return View(await applicationDbContext.ToListAsync());
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
+
+            var data = await applicationDbContext.Include(x => x.MonthData).OrderBy(x=>x.ConsultantId).OrderBy(y=>y.Year).ToListAsync();
+            
+
+            return View(data);
         }
 
         // GET: TimeSheets/Details/5
@@ -59,7 +72,18 @@ namespace ProjectManagement.Controllers
         public IActionResult Create()
         {
             ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name");
-            return View();
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, DateTime.Now.Year);
+
+            TimesheetsViewModel viewModel = new TimesheetsViewModel();
+            viewModel.MonthData = new List<MonthData>();
+            List<TimeSheet> newtimesheets = new List<TimeSheet>();
+            for (int i = 1; i <= 12; i++)
+            {
+                var monthdata = new MonthData() { Month = DateTimeFormatInfo.CurrentInfo.GetMonthName(i), MonthInt = i };
+                viewModel.MonthData.Add(monthdata);
+            }
+
+            return View(viewModel);
         }
 
         // POST: TimeSheets/Create
@@ -67,16 +91,24 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ConsultantId,Year,JanBilling,FebBilling,MarBilling,AprBilling,MayBilling,JunBilling,JulBilling,AugBilling,SepBilling,OctBilling,NovBilling,DecBilling")] TimeSheet timeSheet)
+        public async Task<IActionResult> Create([FromForm]TimesheetsViewModel timeSheetsForm)
         {
+
+            TimeSheet newTimeSheet = new TimeSheet();
+            newTimeSheet.Year = timeSheetsForm.Year;
+            newTimeSheet.ConsultantId = timeSheetsForm.ConsultantId;
+            newTimeSheet.MonthData = timeSheetsForm.MonthData;
+            
+
             if (ModelState.IsValid)
             {
-                _context.Add(timeSheet);
+                _context.Add(newTimeSheet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
-            return View(timeSheet);
+            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheetsForm.ConsultantId);
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, timeSheetsForm.Year);
+            return View(timeSheetsForm);
         }
 
         // GET: TimeSheets/Edit/5

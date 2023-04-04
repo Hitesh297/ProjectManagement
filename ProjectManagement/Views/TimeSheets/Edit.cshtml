@@ -2,11 +2,6 @@
 
 @{
     ViewData["Title"] = "Edit";
-    List<int> yearDropdown = new List<int>();
-    for (int i = 2000; i < 2200; i++)
-    {
-        yearDropdown.Add(i);
-    }
 }
 
 <h1>Edit</h1>
@@ -34,7 +29,7 @@
                 @*<input type="number" min="1900" max="2099" step="1" value="2016" asp-for="Year" class="form-control" />*@
                 <select disabled asp-for="Year" class="form-select">
                     <option>Please Select</option>
-                    @foreach (var year in yearDropdown)
+                    @foreach (var year in Constants.YearDropdown)
                     {
                         <option>@year</option>
                     }
@@ -44,7 +39,7 @@
             </div>
         </div>
 
-        <div class="col-12">
+        @*<div class="col-12">
             <div class="row">
 
                 <div class="col">
@@ -179,7 +174,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
 
         <div class="col-12">

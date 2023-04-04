@@ -42,13 +42,16 @@ creditCardCost.addEventListener("blur", function () {
 function calculateNetMargin() {
     
     var netMargin = document.getElementById("NetMargin");
+    let billingrateValue = isNumeric(billingrate.value) ? parseFloat(billingrate.value) : 0;
     let teamLeadFeeValue = isNumeric(teamLeadFee.value) ? parseFloat(teamLeadFee.value) : 0;
     let marketingFeeValue = isNumeric(marketingFee.value) ? parseFloat(marketingFee.value) : 0;
     let referralFeesValue = isNumeric(referralFees.value) ? parseFloat(referralFees.value) : 0;
     let placementFeeValue = isNumeric(placementFee.value) ? parseFloat(placementFee.value) : 0;
     let creditCardCostValue = isNumeric(creditCardCost.value) ? parseFloat(creditCardCost.value) : 0;
 
-    netMargin.value = billingrate.value - (teamLeadFeeValue + marketingFeeValue + referralFeesValue + placementFeeValue + creditCardCostValue);
+    let creditCardPerecentToValue = (creditCardCostValue / 100) * billingrateValue;
+    netMargin.value = billingrateValue - (teamLeadFeeValue + marketingFeeValue + referralFeesValue + placementFeeValue + creditCardPerecentToValue);
+
     return
 }
 

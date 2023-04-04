@@ -20,6 +20,7 @@ namespace ProjectManagement.Data
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<Consultant> Consultants { get; set; }
         public DbSet<TimeSheet> Timesheets { get; set; }
+        public DbSet<MonthData> MonthData { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.Data;
 
@@ -11,9 +12,10 @@ using ProjectManagement.Data;
 namespace ProjectManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230404021332_updateTimesheetStructure")]
+    partial class updateTimesheetStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +53,15 @@ namespace ProjectManagement.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7e2653aa-3d44-4b32-8cc4-cfe9e03f906e",
-                            ConcurrencyStamp = "43d96624-4dcb-4b09-abc2-816fc5656cbf",
+                            Id = "9bc4a1cd-5f09-4b07-af10-0535ed07717d",
+                            ConcurrencyStamp = "0ed749cd-4779-4c97-bccd-facaa457b308",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "54e4ef70-060b-40cd-bc02-d9c685e42435",
-                            ConcurrencyStamp = "0ae7a4d8-048b-4865-89c7-67d386e017dc",
+                            Id = "01e78f41-227a-4448-a9db-72144a2e08dd",
+                            ConcurrencyStamp = "6a513919-0edb-48c7-86e3-50c4b2a160ce",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -157,33 +159,33 @@ namespace ProjectManagement.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c377a0ba-bc20-40a0-ad8c-7de4c0fd7719",
+                            Id = "d946d08e-6337-4ef7-b2ab-13a0f9a00f14",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6601d30d-444c-4fd7-a505-b2f9bf3a60f9",
+                            ConcurrencyStamp = "fb2da963-f867-43db-a33f-3d142919ac95",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOS3FZxtH85mOmALSL4j5O1xnbHSTEce0QULqCDnAWeaSfaCq7fUKcVvPD3n7upHAQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO7tznS8hyFDnj1Uj0KtnI6Iz6an2HVhe7Z9jBUSLJZV5sH4grrBS4yTk7tEbp69Xw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "07637477-5211-400a-96d2-3a1a91c46efb",
+                            SecurityStamp = "13cdb466-069c-4696-b0e0-d39ec1725091",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         },
                         new
                         {
-                            Id = "3ee41e96-7f02-42fe-8cea-1c76ca2f9a05",
+                            Id = "d01b7b18-e70b-4fcf-a563-ada412dee525",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "290a886e-ca91-4efb-9fca-80a0c71d611a",
+                            ConcurrencyStamp = "c9a8ddf4-254f-4824-add3-7785dc3064ee",
                             Email = "employee@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPLOYEE@GMAIL.COM",
                             NormalizedUserName = "EMPLOYEE@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA+K+Xkwpfu3pEg76FXvFOw6WnCtLxXPUbQVSkEdxTM1G2rtvYkmLJCS0aw9q58XRw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEARdjmaShyA5xWRzhVBMIUINeBiKU9+xwzBZ/fIWRLtnP/9DJBn9dmNiDGsjIgjLWg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d8890b3b-8570-407d-9b30-478191137c1b",
+                            SecurityStamp = "d367e5fb-32df-4162-95b0-c7837c688aee",
                             TwoFactorEnabled = false,
                             UserName = "employee@gmail.com"
                         });
@@ -255,13 +257,13 @@ namespace ProjectManagement.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "c377a0ba-bc20-40a0-ad8c-7de4c0fd7719",
-                            RoleId = "7e2653aa-3d44-4b32-8cc4-cfe9e03f906e"
+                            UserId = "d946d08e-6337-4ef7-b2ab-13a0f9a00f14",
+                            RoleId = "9bc4a1cd-5f09-4b07-af10-0535ed07717d"
                         },
                         new
                         {
-                            UserId = "3ee41e96-7f02-42fe-8cea-1c76ca2f9a05",
-                            RoleId = "54e4ef70-060b-40cd-bc02-d9c685e42435"
+                            UserId = "d01b7b18-e70b-4fcf-a563-ada412dee525",
+                            RoleId = "01e78f41-227a-4448-a9db-72144a2e08dd"
                         });
                 });
 
@@ -392,49 +394,6 @@ namespace ProjectManagement.Data.Migrations
                     b.ToTable("Consultants");
                 });
 
-            modelBuilder.Entity("ProjectManagement.Models.MonthData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal?>("ConsultantPay")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("Hours")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("InvoiceAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Month")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MonthInt")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("PaidAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("Timesheet")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimesheetId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Variation")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Timesheet");
-
-                    b.ToTable("MonthData");
-                });
-
             modelBuilder.Entity("ProjectManagement.Models.TeamMember", b =>
                 {
                     b.Property<int>("Id")
@@ -465,6 +424,28 @@ namespace ProjectManagement.Data.Migrations
 
                     b.Property<int?>("ConsultantId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("ConsultantPay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Hours")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InvoiceAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Month")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MonthInt")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PaidAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Variation")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -572,15 +553,6 @@ namespace ProjectManagement.Data.Migrations
                     b.Navigation("TeamMember");
                 });
 
-            modelBuilder.Entity("ProjectManagement.Models.MonthData", b =>
-                {
-                    b.HasOne("ProjectManagement.Models.TimeSheet", "TimeSheet")
-                        .WithMany("MonthData")
-                        .HasForeignKey("Timesheet");
-
-                    b.Navigation("TimeSheet");
-                });
-
             modelBuilder.Entity("ProjectManagement.Models.TimeSheet", b =>
                 {
                     b.HasOne("ProjectManagement.Models.Consultant", "Consultant")
@@ -603,11 +575,6 @@ namespace ProjectManagement.Data.Migrations
                     b.Navigation("TeamLeadInConsultants");
 
                     b.Navigation("TeamMemberInConsultants");
-                });
-
-            modelBuilder.Entity("ProjectManagement.Models.TimeSheet", b =>
-                {
-                    b.Navigation("MonthData");
                 });
 #pragma warning restore 612, 618
         }
