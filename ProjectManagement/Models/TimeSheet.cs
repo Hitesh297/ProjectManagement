@@ -14,31 +14,6 @@ namespace ProjectManagement.Models
         public int Year { get; set; }
         public virtual ICollection<MonthData>? MonthData { get; set; }
 
-        //[Display(Name = "January")]
-        //public decimal? JanBilling { get; set; }
-        //[Display(Name = "February")]
-        //public decimal? FebBilling { get; set; }
-        //[Display(Name = "March")]
-        //public decimal? MarBilling { get; set; }
-        //[Display(Name = "April")]
-        //public decimal? AprBilling { get; set; }
-        //[Display(Name = "May")]
-        //public decimal? MayBilling { get; set; }
-        //[Display(Name = "June")]
-        //public decimal? JunBilling { get; set; }
-        //[Display(Name = "July")]
-        //public decimal? JulBilling { get; set; }
-        //[Display(Name = "August")]
-        //public decimal? AugBilling { get; set; }
-        //[Display(Name = "September")]
-        //public decimal? SepBilling { get; set; }
-        //[Display(Name = "October")]
-        //public decimal? OctBilling { get; set; }
-        //[Display(Name = "November")]
-        //public decimal? NovBilling { get; set; }
-        //[Display(Name = "December")]
-        //public decimal? DecBilling { get; set; }
-
     }
 
     public class MonthData
@@ -51,8 +26,8 @@ namespace ProjectManagement.Models
         public decimal? ConsultantPay { get; set; }
         public decimal? PaidAmount { get; set; }
         public decimal? Variation { get; set; }
-        public int TimesheetId { get; set; }
         [ForeignKey("Timesheet")]
+        public int TimesheetId { get; set; }
         public virtual TimeSheet? TimeSheet { get; set; }
 
     }

@@ -10,6 +10,7 @@
 <hr />
 
 <form asp-action="Create">
+    
     <div class="row g-3">
         <div class="col-6">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -54,7 +55,7 @@
                             <label asp-for="MonthData[i].InvoiceAmount" class="control-label"></label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="MonthData[i].InvoiceAmount" class="form-control" />
+                                <input asp-for="MonthData[i].InvoiceAmount" class="form-control" readonly />
                             </div>
                         </div>
                         <span asp-validation-for="MonthData[i].InvoiceAmount" class="text-danger"></span>
@@ -65,7 +66,7 @@
                             <label asp-for="MonthData[i].ConsultantPay" class="control-label"></label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="MonthData[i].ConsultantPay" class="form-control" />
+                                <input asp-for="MonthData[i].ConsultantPay" class="form-control" readonly />
                             </div>
                         </div>
                         <span asp-validation-for="MonthData[i].ConsultantPay" class="text-danger"></span>
@@ -87,7 +88,7 @@
                             <label asp-for="MonthData[i].Variation" class="control-label"></label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input asp-for="MonthData[i].Variation" class="form-control" />
+                                <input asp-for="MonthData[i].Variation" class="form-control" readonly />
                             </div>
                         </div>
                         <span asp-validation-for="MonthData[i].Variation" class="text-danger"></span>
@@ -117,8 +118,20 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="@Url.Content("~/js/CreateTimeSheets.js")"></script>
+        <script type="text/javascript">
+
+            function getConsultantValue() {
+                return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ConsultantsList));
+            }
+            
+        </script>
     }
 }
+
+

@@ -73,6 +73,7 @@ namespace ProjectManagement.Controllers
         {
             ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name");
             ViewData["Year"] = new SelectList(Constants.YearDropdown, DateTime.Now.Year);
+            ViewData["ConsultantsList"] = _context.Consultants.ToList();
 
             TimesheetsViewModel viewModel = new TimesheetsViewModel();
             viewModel.MonthData = new List<MonthData>();
