@@ -58,6 +58,14 @@ namespace ProjectManagement.Controllers
                 return NotFound();
             }
 
+            ViewData["MarketingManagerMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
+
             return View(consultant);
         }
 
@@ -94,7 +102,7 @@ namespace ProjectManagement.Controllers
             ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
             ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_context.TeamMembers, "Id", "ClientName", consultant.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 

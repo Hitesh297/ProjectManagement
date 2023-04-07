@@ -6,131 +6,230 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>Consultant</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+<h4>Consultant</h4>
+<hr />
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UniqueConsultantId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UniqueConsultantId)
-        </dd>
+<div class="col-md-7 col-lg-8">
+    
+        <div class="row g-3">
 
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Recruiter)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Recruiter.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TeamLead)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TeamLead.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TeamMember)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TeamMember.Name)
-        </dd>
+            <input type="hidden" asp-for="Id" />
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Client)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Client.ClientName)
-        </dd>
+            <div class="col-12">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group input-group">
+                    <label asp-for="Name" class="input-group-text control-label"></label>
+                    <input asp-for="Name" class="form-control" disabled="disabled"/>
 
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BillingRate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BillingRate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PayRate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PayRate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TeamLeadFee)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TeamLeadFee)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MarketingFee)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MarketingFee)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MarketingManager)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MarketingManager.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReferralFees)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReferralFees)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReferredBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReferredBy.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PlacementFee)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PlacementFee)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PlacedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PlacedBy.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreditCardCost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreditCardCost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NetMargin)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NetMargin)
-        </dd>
-    </dl>
+                </div>
+                
+            </div>
+
+            <div class="col-12">
+                <div class="form-group input-group">
+                    <label asp-for="UniqueConsultantId" class="control-label input-group-text"></label>
+                    <input asp-for="UniqueConsultantId" class="form-control" disabled="disabled"  />
+
+                </div>
+               
+            </div>
+
+            <div class="col-12">
+                <div class="form-group input-group">
+                    <label asp-for="RecruiterMemberId" class="control-label input-group-text"></label>
+                    <select asp-for="RecruiterMemberId" class="form-select" asp-items="ViewBag.RecruiterMemberId" disabled="disabled">
+                        <option>Please Select</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group input-group">
+                    <label asp-for="TeamMemberId" class="control-label input-group-text"></label>
+                    <select asp-for="TeamMemberId" class="form-select" asp-items="ViewBag.TeamMemberId" disabled="disabled" >
+                        <option>Please Select</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group input-group">
+                    <label asp-for="ClientId" class="control-label input-group-text"></label>
+                    @{
+                        var clientlist = ViewBag.ClientId; 
+                    }
+                    <select asp-for="ClientId" class="form-select" asp-items="clientlist" disabled="disabled">
+                        <option>Please Select</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="StartDate" class="control-label input-group-text"></label>
+                            <input asp-for="StartDate" type="date" class="form-control" disabled="disabled" />
+                        </div>
+                        
+                    </div>
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="EndDate" class="control-label input-group-text"></label>
+                            <input asp-for="EndDate" type="date" class="form-control" disabled="disabled" />
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group input-group">
+                    <label asp-for="BillingRate" class="control-label input-group-text"></label>
+                    <input asp-for="BillingRate" class="form-control" disabled="disabled" />
+                    <span class="input-group-text">$</span>
+                </div>
+               
+            </div>
+            <div class="col-12">
+                <div class="form-group input-group">
+                    <label asp-for="PayRate" class="control-label input-group-text"></label>
+                    <input asp-for="PayRate" class="form-control" disabled="disabled" />
+                    <span class="input-group-text">$</span>
+                </div>
+               
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="TeamLeadFee" class="control-label input-group-text"></label>
+                            <input asp-for="TeamLeadFee" class="form-control" disabled="disabled" />
+                            <span class="input-group-text">$</span>
+
+                        </div>
+                       
+                    </div>
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="TeamLeadMemberId" class="control-label input-group-text"></label>
+                            <select asp-for="TeamLeadMemberId" class="form-select" asp-items="ViewBag.TeamLeadMemberId" disabled="disabled" >
+                                <option>Please Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="MarketingFee" class="control-label input-group-text"></label>
+                            <input asp-for="MarketingFee" class="form-control" disabled="disabled" />
+                            <span class="input-group-text">$</span>
+                        </div>
+                       
+                    </div>
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="MarketingManagerMemberId" class="control-label input-group-text"></label>
+                            <select asp-for="MarketingManagerMemberId" class="form-select" asp-items="ViewBag.MarketingManagerMemberId" disabled="disabled">
+                                <option>Please Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <label asp-for="ReferralFees" class="input-group-text"></label>
+                            <input asp-for="ReferralFees" class="form-control" disabled="disabled" />
+                            <span class="input-group-text">$</span>
+                        </div>
+                       
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="ReferredByMemberId" class="control-label input-group-text"></label>
+                            <select asp-for="ReferredByMemberId" class="form-select" asp-items="ViewBag.ReferredByMemberId" disabled="disabled" >
+                                <option>Please Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col">
+                        @*<label asp-for="PlacementFee" class="control-label"></label>
+                        <input asp-for="PlacementFee" class="form-control" />
+                        <span asp-validation-for="PlacementFee" class="text-danger"></span>*@
+                        <div class="input-group">
+                            @*<span class="input-group-text">PlacementFee</span>*@
+                            <label asp-for="PlacementFee" class="input-group-text"></label>
+                            <input asp-for="PlacementFee" class="form-control" disabled="disabled" >
+                            <span class="input-group-text">$</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            @*<span class="input-group-text" id="basic-addon1">Year</span>*@
+                            <label asp-for="PlacedByMemberId" class="input-group-text"></label>
+                            <select asp-for="PlacedByMemberId" class="form-select" asp-items="ViewBag.PlacedByMemberId" disabled="disabled" >
+                                <option>Please Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="CreditCardCost" class="control-label input-group-text"></label>
+                            <input asp-for="CreditCardCost" class="form-control" disabled="disabled" />
+                            <span class="input-group-text">$</span>
+                        </div>
+                        
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group input-group">
+                            <label asp-for="NetMargin" class="control-label input-group-text alert-warning bg-warning"></label>
+                            <input readonly asp-for="NetMargin" class="form-control bg-warning alert-warning" disabled="disabled" />
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+           
+
+        </div>
+    </>
+
 </div>
+
+
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="@Url.Content("~/js/consultant.js")"></script>
+}
