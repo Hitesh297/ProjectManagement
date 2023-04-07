@@ -161,6 +161,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+                ViewData["Roles"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name", Input.Role);
             }
 
             // If we got this far, something failed, redisplay form
