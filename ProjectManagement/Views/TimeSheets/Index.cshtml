@@ -49,8 +49,7 @@
 
 <table class="table overflow-auto table-bordered border-primary">
     <thead>
-        @foreach (TimeSheet item in Model)
-        {  
+       
         <tr>
             <th>
                 @*@item.ConsultantId*@
@@ -61,7 +60,7 @@
                 Year
             </th>
 
-                @foreach (MonthData md in item.MonthData)
+                @foreach (MonthData md in Model[0].MonthData)
                 {
                 <th>
                         @md.Month
@@ -69,7 +68,7 @@
             } 
             <th></th>
         </tr>
-        }
+        
     </thead>
     <tbody>
         @foreach (TimeSheet item in Model)
