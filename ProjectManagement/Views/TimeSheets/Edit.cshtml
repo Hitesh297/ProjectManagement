@@ -1,4 +1,4 @@
-﻿@model ProjectManagement.Models.TimeSheet
+﻿@model ProjectManagement.Models.ViewModels.TimesheetsViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,16 +9,15 @@
 <h4>TimeSheet</h4>
 <hr />
 
-    
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+<form asp-action="Edit">
+
     <div class="row g-3">
         <div class="col-6">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ConsultantId" class="control-label"></label>
-                <select disabled asp-for="ConsultantId" class="form-select" asp-items="ViewBag.ConsultantId">
+                <select asp-for="ConsultantId" class="form-select" asp-items="ViewBag.ConsultantId">
                     <option>Please Select</option>
                 </select>
             </div>
@@ -27,155 +26,79 @@
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>
                 @*<input type="number" min="1900" max="2099" step="1" value="2016" asp-for="Year" class="form-control" />*@
-                <select disabled asp-for="Year" class="form-select">
+                <select asp-for="Year" class="form-select" asp-items="ViewBag.Year">
                     <option>Please Select</option>
-                    @foreach (var year in Constants.YearDropdown)
-                    {
-                        <option>@year</option>
-                    }
-
                 </select>
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
         </div>
 
-        @*<div class="col-12">
-            <div class="row">
 
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="JanBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="JanBilling" class="form-control" />
+        @for (int i = 0; i < Model.MonthData.Count; i++)
+        {
+            <div class="col-12">
+                <div class="row">
+                    <input type="hidden" asp-for="MonthData[i].Id" value="@Model.MonthData[i].Id" />
+                    <input type="hidden" asp-for="MonthData[i].Month" value="@Model.MonthData[i].Month" />
+                    <input type="hidden" asp-for="MonthData[i].MonthInt" value="@Model.MonthData[i].MonthInt" />
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].Month" class="control-label">@Model.MonthData[i].Month</label>
+                            <div class="input-group">
+                                @*<span class="input-group-text">$</span>*@
+                                <input asp-for="MonthData[i].Hours" class="form-control" />
+                            </div>
                         </div>
+                        <span asp-validation-for="MonthData[i].Hours" class="text-danger"></span>
                     </div>
-                    <span asp-validation-for="JanBilling" class="text-danger"></span>
-                </div>
 
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="FebBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="FebBilling" class="form-control" />
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].InvoiceAmount" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="MonthData[i].InvoiceAmount" class="form-control" readonly />
+                            </div>
                         </div>
-                        <span asp-validation-for="FebBilling" class="text-danger"></span>
+                        <span asp-validation-for="MonthData[i].InvoiceAmount" class="text-danger"></span>
                     </div>
-                </div>
 
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="MarBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="MarBilling" class="form-control" />
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].ConsultantPay" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="MonthData[i].ConsultantPay" class="form-control" readonly />
+                            </div>
                         </div>
-                        <span asp-validation-for="MarBilling" class="text-danger"></span>
+                        <span asp-validation-for="MonthData[i].ConsultantPay" class="text-danger"></span>
                     </div>
-                </div>
 
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="AprBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="AprBilling" class="form-control" />
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].PaidAmount" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="MonthData[i].PaidAmount" class="form-control" />
+                            </div>
                         </div>
-                        <span asp-validation-for="AprBilling" class="text-danger"></span>
+                        <span asp-validation-for="MonthData[i].PaidAmount" class="text-danger"></span>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="MayBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="MayBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="MayBilling" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="JunBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="JunBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="JunBilling" class="text-danger"></span>
-                    </div>
-                </div>
 
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].Variation" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="MonthData[i].Variation" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <span asp-validation-for="MonthData[i].Variation" class="text-danger"></span>
+                    </div>
 
-            </div>
-        </div>
-
-
-        <div class="col-12">
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="JulBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="JulBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="JulBilling" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="AugBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="AugBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="AugBilling" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="SepBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="SepBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="SepBilling" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="OctBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="OctBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="OctBilling" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="NovBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="NovBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="NovBilling" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="DecBilling" class="control-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input asp-for="DecBilling" class="form-control" />
-                        </div>
-                        <span asp-validation-for="DecBilling" class="text-danger"></span>
-                    </div>
                 </div>
             </div>
-        </div>*@
-
+        }
 
         <div class="col-12">
             <div class="form-group">
@@ -183,15 +106,28 @@
             </div>
         </div>
     </div>
-            
-        </form>
-   
+
+</form>
 
 
-<div>
+<div class="pt-5">
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="@Url.Content("~/js/TimeSheets.js")"></script>
+        <script type="text/javascript">
+
+            function getConsultantValue() {
+                return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ConsultantsList));
+            }
+
+        </script>
+    }
 }
+
+

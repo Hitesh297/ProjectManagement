@@ -120,13 +120,23 @@ namespace ProjectManagement.Controllers
                 return NotFound();
             }
 
-            var timeSheet = await _context.Timesheets.FindAsync(id);
+            var timeSheet = await _context.Timesheets.Include(x=>x.MonthData).Where(x=>x.Id == id).FirstAsync();
+
             if (timeSheet == null)
             {
                 return NotFound();
             }
+
+            TimesheetsViewModel timeSheetVm = new TimesheetsViewModel();
+            timeSheetVm.Id = timeSheet.Id;
+            timeSheetVm.Year = timeSheet.Year;
+            timeSheetVm.ConsultantId = timeSheet.ConsultantId;
+            timeSheetVm.MonthData = timeSheet.MonthData.ToList();
+
+            ViewData["ConsultantsList"] = _context.Consultants.ToList();
             ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
-            return View(timeSheet);
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, timeSheet.Year);
+            return View(timeSheetVm);
         }
 
         // POST: TimeSheets/Edit/5
@@ -134,7 +144,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ConsultantId,Year,JanBilling,FebBilling,MarBilling,AprBilling,MayBilling,JunBilling,JulBilling,AugBilling,SepBilling,OctBilling,NovBilling,DecBilling")] TimeSheet timeSheet)
+        public async Task<IActionResult> Edit(int id, [FromForm]TimeSheet timeSheet)
         {
             if (id != timeSheet.Id)
             {
@@ -162,6 +172,7 @@ namespace ProjectManagement.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, timeSheet.Year);
             return View(timeSheet);
         }
 

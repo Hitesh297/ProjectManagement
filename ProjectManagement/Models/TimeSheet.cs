@@ -22,9 +22,13 @@ namespace ProjectManagement.Models
         public string Month { get; set; }
         public int MonthInt { get; set; }
         public decimal? Hours { get; set; }
+        [Display(Name = "Invoice Amount")]
         public decimal? InvoiceAmount { get; set; }
+        [Display(Name = "Consultant Pay")]
         public decimal? ConsultantPay { get; set; }
+        [Display(Name = "Paid Amount")]
         public decimal? PaidAmount { get; set; }
+        [Display(Name = "Variation")]
         public decimal? Variation { get; set; }
         [ForeignKey("Timesheet")]
         public int TimesheetId { get; set; }
