@@ -52,12 +52,10 @@
        
         <tr>
             <th>
-                @*@item.ConsultantId*@
-                Consultant
+                @Html.DisplayNameFor(model => model[0].ConsultantId)
             </th>
             <th>
-                @*@item.Year*@
-                Year
+                @Html.DisplayNameFor(model => model[0].Year)
             </th>
 
                 @foreach (MonthData md in Model[0].MonthData)
@@ -75,7 +73,7 @@
         {
             <tr>
                 <td>
-                    @*@Html.DisplayFor(modelItem => item.Consultant.Name)*@
+                    @Html.DisplayFor(Model => item.Consultant.Name)
                 </td>
                 <td>
                     @item.Year
