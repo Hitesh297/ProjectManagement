@@ -34,5 +34,30 @@ namespace ProjectManagement.Controllers
         {
             return new List<string>(await _userManager.GetRolesAsync(user));
         }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "User nor found!.");
+                return View("Error");
+            }
+            else
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "UserRoles");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View("Error");
+            }
+        }
     }
 }

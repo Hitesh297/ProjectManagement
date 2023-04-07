@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<ProjectManagement.Models.ViewModels.UserRolesViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manage Users";
 }
 
-<h1>Index</h1>
+<h1>Manage Users</h1>
 
 <p>
     <a asp-area="Identity" asp-page="/Account/Register">Create New</a>
@@ -38,11 +38,13 @@
                     @Html.DisplayFor(modelItem => item.Roles)
                 </td>
                 <td>
-                   @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                   @*<a asp-action="edit" asp-route-id="@item.id">edit</a> |
+                    <a asp-action="details" asp-route-id="@item.id">details</a> |*@
+                    <a asp-action="delete" asp-route-id="@item.UserId">delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@*@Html.ActionLink("Delete", "ConfirmDelete", new { id = item.DoctorId })*@

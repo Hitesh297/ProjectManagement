@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -16,8 +17,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ProjectManagement.Models;
 
 namespace ProjectManagement.Areas.Identity.Pages.Account
 {
@@ -29,6 +32,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -44,6 +48,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -105,6 +110,8 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            //TempData["Roles"] = _roleManager.Roles.ToList();
+            ViewData["Roles"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name", "Employee");
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -123,9 +130,11 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    _logger.LogInformation("Add role to user.");
+                    await _userManager.AddToRoleAsync(user, Input.Role);
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -143,7 +152,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToAction("Index", "UserRoles");
                         //await _signInManager.SignInAsync(user, isPersistent: false);
                         ///*return*/ LocalRedirect(returnUrl);
                     }
