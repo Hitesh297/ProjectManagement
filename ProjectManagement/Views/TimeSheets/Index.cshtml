@@ -36,6 +36,9 @@
         </div>
     </div>
 </form>
+@if (Model != null && Model.Count() != 0)
+{
+    
 
 <table class="table overflow-auto table-bordered border-primary">
     <thead>
@@ -85,3 +88,4 @@
         }
     </tbody>
 </table>
+}
