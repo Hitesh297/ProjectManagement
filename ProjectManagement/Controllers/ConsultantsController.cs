@@ -6,65 +6,66 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
+using ProjectManagement.Data.UnitOfWorks;
 using ProjectManagement.Models;
 
 namespace ProjectManagement.Controllers
 {
     public class ConsultantsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ConsultantsController(ApplicationDbContext context)
+        public ConsultantsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Consultants
         public async Task<IActionResult> Index(string searchKey = null)
         {
             string url = string.Empty;
-            IQueryable<Consultant> applicationDbContext = null ;
+            IEnumerable<Consultant> applicationDbContext = null ;
             if (!string.IsNullOrWhiteSpace(searchKey))
             {
-                applicationDbContext = _context.Consultants.Include(t=>t.Client).Where(x => x.Name.ToLower().Contains(searchKey.ToLower()) || x.Client.ClientName.ToLower().Contains(searchKey.ToLower()));
+                applicationDbContext = _unitOfWork.Consultants.GetAllIncluding(t => t.Client).Where(x => x.Name.ToLower().Contains(searchKey.ToLower()) || x.Client.ClientName.ToLower().Contains(searchKey.ToLower()));
             }
             else
             {
-                applicationDbContext = _context.Consultants.Include(t => t.Client);
+                applicationDbContext = _unitOfWork.Consultants.GetAllIncluding(t => t.Client);
             }
             
-            return View(await applicationDbContext.ToListAsync());
+            return View(applicationDbContext.ToList());
         }
 
         // GET: Consultants/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Consultants == null)
+            if (id == null || _unitOfWork.Consultants == null)
             {
                 return NotFound();
             }
 
-            var consultant = await _context.Consultants
-                .Include(c => c.MarketingManager)
-                .Include(c => c.PlacedBy)
-                .Include(c => c.Recruiter)
-                .Include(c => c.ReferredBy)
-                .Include(c => c.TeamLead)
-                .Include(c => c.TeamMember)
-                .Include(c => c.Client)
+            var consultant = await _unitOfWork.Consultants.GetAllIncluding(
+                c => c.MarketingManager,
+                c => c.PlacedBy,
+                c => c.Recruiter,
+                c => c.ReferredBy,
+                c => c.TeamLead,
+                c => c.TeamMember,
+                c => c.Client)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (consultant == null)
             {
                 return NotFound();
             }
 
-            ViewData["MarketingManagerMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.MarketingManagerMemberId);
-            ViewData["PlacedByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.PlacedByMemberId);
-            ViewData["RecruiterMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.RecruiterMemberId);
-            ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
-            ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
-            ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
+            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
 
             return View(consultant);
         }
@@ -72,14 +73,14 @@ namespace ProjectManagement.Controllers
         // GET: Consultants/Create
         public IActionResult Create()
         {
-            var selectListItems = new SelectList(_context.TeamMembers, "Id", "Name");
+            var selectListItems = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name");
             ViewData["MarketingManagerMemberId"] = selectListItems;
             ViewData["PlacedByMemberId"] = selectListItems;
             ViewData["RecruiterMemberId"] = selectListItems;
             ViewData["ReferredByMemberId"] = selectListItems;
             ViewData["TeamLeadMemberId"] = selectListItems;
             ViewData["TeamMemberId"] = selectListItems;
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName");
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName");
             return View();
         }
 
@@ -92,40 +93,40 @@ namespace ProjectManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(consultant);
-                await _context.SaveChangesAsync();
+                _unitOfWork.Consultants.Add(consultant);
+                await _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarketingManagerMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.MarketingManagerMemberId);
-            ViewData["PlacedByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.PlacedByMemberId);
-            ViewData["RecruiterMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.RecruiterMemberId);
-            ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
-            ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
-            ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
+            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
         // GET: Consultants/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.Consultants == null)
+            if (id == null || _unitOfWork.Consultants == null)
             {
                 return NotFound();
             }
 
-            var consultant = await _context.Consultants.FindAsync(id);
+            var consultant = await _unitOfWork.Consultants.FindAsync(id);
             if (consultant == null)
             {
                 return NotFound();
             }
-            ViewData["MarketingManagerMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.MarketingManagerMemberId);
-            ViewData["PlacedByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.PlacedByMemberId);
-            ViewData["RecruiterMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.RecruiterMemberId);
-            ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
-            ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
-            ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
+            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
@@ -145,8 +146,8 @@ namespace ProjectManagement.Controllers
             {
                 try
                 {
-                    _context.Update(consultant);
-                    await _context.SaveChangesAsync();
+                    _unitOfWork.Consultants.Update(consultant);
+                    await _unitOfWork.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -161,32 +162,32 @@ namespace ProjectManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarketingManagerMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.MarketingManagerMemberId);
-            ViewData["PlacedByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.PlacedByMemberId);
-            ViewData["RecruiterMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.RecruiterMemberId);
-            ViewData["ReferredByMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.ReferredByMemberId);
-            ViewData["TeamLeadMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamLeadMemberId);
-            ViewData["TeamMemberId"] = new SelectList(_context.TeamMembers, "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "ClientName", consultant.ClientId);
+            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
         // GET: Consultants/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Consultants == null)
+            if (id == null || _unitOfWork.Consultants == null)
             {
                 return NotFound();
             }
 
-            var consultant = await _context.Consultants
-                .Include(c => c.MarketingManager)
-                .Include(c => c.PlacedBy)
-                .Include(c => c.Recruiter)
-                .Include(c => c.ReferredBy)
-                .Include(c => c.TeamLead)
-                .Include(c => c.TeamMember)
-                .Include(c => c.Client)
+            var consultant = await _unitOfWork.Consultants.GetAllIncluding(
+                c => c.MarketingManager,
+                c => c.PlacedBy,
+                c => c.Recruiter,
+                c => c.ReferredBy,
+                c => c.TeamLead,
+                c => c.TeamMember,
+                c => c.Client)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (consultant == null)
             {
@@ -201,23 +202,23 @@ namespace ProjectManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Consultants == null)
+            if (_unitOfWork.Consultants == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Consultants'  is null.");
             }
-            var consultant = await _context.Consultants.FindAsync(id);
+            var consultant = await _unitOfWork.Consultants.FindAsync(id);
             if (consultant != null)
             {
-                _context.Consultants.Remove(consultant);
+                _unitOfWork.Consultants.Remove(consultant);
             }
-            
-            await _context.SaveChangesAsync();
+
+            await _unitOfWork.Complete();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ConsultantExists(int id)
         {
-          return (_context.Consultants?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_unitOfWork.Consultants?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

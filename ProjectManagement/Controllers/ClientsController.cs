@@ -6,36 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
+using ProjectManagement.Data.UnitOfWorks;
 using ProjectManagement.Models;
 
 namespace ProjectManagement.Controllers
 {
     public class ClientsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public ClientsController(ApplicationDbContext context)
+        private readonly IUnitOfWork _unitOfWork;
+        public ClientsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-              return _context.Clients != null ? 
-                          View(await _context.Clients.ToListAsync()) :
+              return _unitOfWork.Clients != null ? 
+                          View(await _unitOfWork.Clients.GetAllActiveAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Clients'  is null.");
         }
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Clients == null)
+            if (id == null || _unitOfWork.Clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Clients
+            var client = await _unitOfWork.Clients
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
             {
@@ -60,22 +60,22 @@ namespace ProjectManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(client);
-                await _context.SaveChangesAsync();
+                _unitOfWork.Clients.Add(client);
+                await _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             return View(client);
         }
 
         // GET: Clients/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.Clients == null)
+            if (_unitOfWork.Clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Clients.FindAsync(id);
+            var client = await _unitOfWork.Clients.FindAsync(id);
             if (client == null)
             {
                 return NotFound();
@@ -99,8 +99,8 @@ namespace ProjectManagement.Controllers
             {
                 try
                 {
-                    _context.Update(client);
-                    await _context.SaveChangesAsync();
+                    _unitOfWork.Clients.Update(client);
+                    await _unitOfWork.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,12 +121,12 @@ namespace ProjectManagement.Controllers
         // GET: Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Clients == null)
+            if (id == null || _unitOfWork.Clients == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Clients
+            var client = await _unitOfWork.Clients
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
             {
@@ -141,23 +141,23 @@ namespace ProjectManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Clients == null)
+            if (_unitOfWork.Clients == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Clients'  is null.");
             }
-            var client = await _context.Clients.FindAsync(id);
+            var client = await _unitOfWork.Clients.FindAsync(id);
             if (client != null)
             {
-                _context.Clients.Remove(client);
+                _unitOfWork.Clients.Remove(client);
             }
             
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Complete();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClientExists(int id)
         {
-          return (_context.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_unitOfWork.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
