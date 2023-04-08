@@ -14,5 +14,10 @@ namespace ProjectManagement.Data.Repositories
         {
             return await _context.Clients.Where(x=>x.IsActive).ToListAsync();
         }
+
+        public IEnumerable<Client> GetAllActive()
+        {
+            return _context.Clients.Where(x => x.IsActive).ToList();
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace ProjectManagement.Data.Repositories
     {
         public ConsultantRepository(ApplicationDbContext context) : base(context)
         {
+
         }
     }
 }

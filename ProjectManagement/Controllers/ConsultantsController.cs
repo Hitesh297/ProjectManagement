@@ -73,14 +73,14 @@ namespace ProjectManagement.Controllers
         // GET: Consultants/Create
         public IActionResult Create()
         {
-            var selectListItems = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name");
+            var selectListItems = new SelectList(_unitOfWork.TeamMembers.GetAllActive().ToList(), "Id", "Name");
             ViewData["MarketingManagerMemberId"] = selectListItems;
             ViewData["PlacedByMemberId"] = selectListItems;
             ViewData["RecruiterMemberId"] = selectListItems;
             ViewData["ReferredByMemberId"] = selectListItems;
             ViewData["TeamLeadMemberId"] = selectListItems;
             ViewData["TeamMemberId"] = selectListItems;
-            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName");
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive().ToList(), "Id", "ClientName");
             return View();
         }
 
@@ -97,13 +97,13 @@ namespace ProjectManagement.Controllers
                 await _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
-            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.PlacedByMemberId);
-            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.RecruiterMemberId);
-            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.ReferredByMemberId);
-            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
-            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
+            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive(), "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
@@ -120,13 +120,13 @@ namespace ProjectManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
-            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.PlacedByMemberId);
-            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.RecruiterMemberId);
-            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.ReferredByMemberId);
-            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
-            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
+            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive(), "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
@@ -162,13 +162,13 @@ namespace ProjectManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.MarketingManagerMemberId);
-            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.PlacedByMemberId);
-            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.RecruiterMemberId);
-            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.ReferredByMemberId);
-            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
-            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
-            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
+            ViewData["MarketingManagerMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.MarketingManagerMemberId);
+            ViewData["PlacedByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.PlacedByMemberId);
+            ViewData["RecruiterMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.RecruiterMemberId);
+            ViewData["ReferredByMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.ReferredByMemberId);
+            ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamLeadMemberId);
+            ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamMemberId);
+            ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive(), "Id", "ClientName", consultant.ClientId);
             return View(consultant);
         }
 
