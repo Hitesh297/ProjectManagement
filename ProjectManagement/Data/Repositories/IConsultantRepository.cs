@@ -4,5 +4,6 @@ namespace ProjectManagement.Data.Repositories
 {
     public interface IConsultantRepository : IGenericRepository<Consultant>
     {
+        IEnumerable<Consultant> GetAllActive();
     }
 }

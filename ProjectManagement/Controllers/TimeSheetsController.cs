@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
+using ProjectManagement.Data.UnitOfWorks;
 using ProjectManagement.Models;
 using ProjectManagement.Models.ViewModels;
 
@@ -14,18 +15,18 @@ namespace ProjectManagement.Controllers
 {
     public class TimeSheetsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public TimeSheetsController(ApplicationDbContext context)
+        public TimeSheetsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: TimeSheets
         public async Task<IActionResult> Index(int consultantId = 0, int year = 0)
         {
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name");
-            IQueryable<TimeSheet> applicationDbContext = _context.Timesheets.Include(t => t.Consultant);
+            ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAll().ToList(), "Id", "Name");
+            IQueryable<TimeSheet> applicationDbContext = _unitOfWork.TimeSheets.GetAllIncluding(t => t.Consultant);
             if (consultantId != 0)
             {
                 applicationDbContext = applicationDbContext.Where(x => x.Consultant.Id == consultantId);
@@ -40,7 +41,7 @@ namespace ProjectManagement.Controllers
                 applicationDbContext = applicationDbContext.Where(x => x.Year == year);
             }
             
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", consultantId);
+            ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAll().ToList(), "Id", "Name", consultantId);
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
 
             var data = await applicationDbContext.Include(x => x.MonthData).OrderBy(x=>x.ConsultantId).OrderBy(y=>y.Year).ToListAsync();
@@ -52,13 +53,13 @@ namespace ProjectManagement.Controllers
         // GET: TimeSheets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Timesheets == null)
+            if (id == null || _unitOfWork.TimeSheets.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var timeSheet = await _context.Timesheets
-                .Include(t => t.Consultant)
+            var timeSheet = await _unitOfWork.TimeSheets.GetAllIncluding
+                (t => t.Consultant)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeSheet == null)
             {
@@ -71,11 +72,13 @@ namespace ProjectManagement.Controllers
         // GET: TimeSheets/Create
         public IActionResult Create()
         {
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name");
-            ViewData["Year"] = new SelectList(Constants.YearDropdown, DateTime.Now.Year);
-            ViewData["ConsultantsList"] = _context.Consultants.ToList();
+            var defaultYear = DateTime.Now.Year;
+            ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAllActive().ToList(), "Id", "Name");
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, defaultYear);
+            ViewData["ConsultantsList"] = _unitOfWork.Consultants.GetAll().ToList();
 
             TimesheetsViewModel viewModel = new TimesheetsViewModel();
+            viewModel.Year = defaultYear;
             viewModel.MonthData = new List<MonthData>();
             List<TimeSheet> newtimesheets = new List<TimeSheet>();
             for (int i = 1; i <= 12; i++)
@@ -103,11 +106,11 @@ namespace ProjectManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(newTimeSheet);
-                await _context.SaveChangesAsync();
+                _unitOfWork.TimeSheets.Add(newTimeSheet);
+                await _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheetsForm.ConsultantId);
+            ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAllActive().ToList(), "Id", "Name", timeSheetsForm.ConsultantId);
             ViewData["Year"] = new SelectList(Constants.YearDropdown, timeSheetsForm.Year);
             return View(timeSheetsForm);
         }
@@ -115,12 +118,12 @@ namespace ProjectManagement.Controllers
         // GET: TimeSheets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Timesheets == null)
+            if (id == null || _unitOfWork.TimeSheets.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var timeSheet = await _context.Timesheets.Include(x=>x.MonthData).Where(x=>x.Id == id).FirstAsync();
+            var timeSheet = await _unitOfWork.TimeSheets.GetAllIncluding(x=>x.MonthData).Where(x=>x.Id == id).FirstAsync();
 
             if (timeSheet == null)
             {
@@ -133,8 +136,8 @@ namespace ProjectManagement.Controllers
             timeSheetVm.ConsultantId = timeSheet.ConsultantId;
             timeSheetVm.MonthData = timeSheet.MonthData.ToList();
 
-            ViewData["ConsultantsList"] = _context.Consultants.ToList();
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
+            ViewData["ConsultantsList"] = _unitOfWork.Consultants.GetAll().ToList();
+            ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAllActive().ToList(), "Id", "Name", timeSheet.ConsultantId);
             ViewData["Year"] = new SelectList(Constants.YearDropdown, timeSheet.Year);
             return View(timeSheetVm);
         }
@@ -155,8 +158,8 @@ namespace ProjectManagement.Controllers
             {
                 try
                 {
-                    _context.Update(timeSheet);
-                    await _context.SaveChangesAsync();
+                    _unitOfWork.TimeSheets.Update(timeSheet);
+                    await _unitOfWork.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -171,7 +174,8 @@ namespace ProjectManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConsultantId"] = new SelectList(_context.Consultants, "Id", "Name", timeSheet.ConsultantId);
+            ViewData["ConsultantsList"] = _unitOfWork.Consultants.GetAll().ToList();
+            ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAllActive().ToList(), "Id", "Name", timeSheet.ConsultantId);
             ViewData["Year"] = new SelectList(Constants.YearDropdown, timeSheet.Year);
             return View(timeSheet);
         }
@@ -179,13 +183,13 @@ namespace ProjectManagement.Controllers
         // GET: TimeSheets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Timesheets == null)
+            if (id == null || _unitOfWork.TimeSheets.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var timeSheet = await _context.Timesheets
-                .Include(t => t.Consultant)
+            var timeSheet = await _unitOfWork.TimeSheets.GetAllIncluding
+                (t => t.Consultant)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeSheet == null)
             {
@@ -200,23 +204,23 @@ namespace ProjectManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Timesheets == null)
+            if (_unitOfWork.TimeSheets.GetAll() == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Timesheets'  is null.");
             }
-            var timeSheet = await _context.Timesheets.FindAsync(id);
+            var timeSheet = await _unitOfWork.TimeSheets.FindAsync(id);
             if (timeSheet != null)
             {
-                _context.Timesheets.Remove(timeSheet);
+                _unitOfWork.TimeSheets.Remove(timeSheet);
             }
             
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Complete();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TimeSheetExists(int id)
         {
-          return (_context.Timesheets?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_unitOfWork.TimeSheets?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

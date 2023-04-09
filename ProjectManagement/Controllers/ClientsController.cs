@@ -23,7 +23,7 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> Index()
         {
               return _unitOfWork.Clients != null ? 
-                          View(await _unitOfWork.Clients.GetAllActiveAsync()) :
+                          View(await _unitOfWork.Clients.GetAllAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Clients'  is null.");
         }
 

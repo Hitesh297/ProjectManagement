@@ -1,20 +1,11 @@
-﻿//MonthData_0__Hours
-//for
-//document.getElementById("TeamLeadFee").addEventListener("blur", function () {
-//    calculateNetMargin();
-
-//});
-
-//$().ready(function () {
-//    console.log("document loaded");
-//});
-
+﻿
 $(document).ready(function () {
     console.log("document loaded");
 
     var consultants = getConsultantValue();
 
     for (var i = 0; i < 12; i++) {
+        //calculate other fields when hours are added
         $("#MonthData_" + i + "__Hours").bind('blur', {
             id: i
         }, function (event) {
@@ -26,6 +17,12 @@ $(document).ready(function () {
             calculateVariation(event.data.id);
         });
     }
+    ///Calculate again whe the dropdown is selected
+    $("#ConsultantId").change(function () {
+        for (var i = 0; i < 12; i++) {
+            calculate(i);
+        }
+    });
 
     function calculateVariation(rowindex) {
         var variation = 0;
@@ -40,22 +37,20 @@ $(document).ready(function () {
     }
 
     function calculate(rowindex) {
-        console.log("month calculate entry", rowindex);
+       /* console.log("month calculate entry", rowindex);*/
         var consultantId;
         var billingRate = 0;
         var payRate = 0;
         if ($("#ConsultantId").val() == 'Please Select') {
+            $("#ConsultantId").focus();
             alert("Please select consultant from dropdown.");
+           
         } else {
             consultantId = $("#ConsultantId").val();
             $.each(consultants, (index, consultant) => {
                 if (consultant.Id == consultantId) {
-                    console.log("Found!", consultant.Name);
                     billingRate = consultant.BillingRate;
                     payRate = consultant.PayRate;
-
-                    console.log("Billing", billingRate);
-                    console.log("payrate", payRate);
                 }
 
             });
@@ -63,23 +58,14 @@ $(document).ready(function () {
 
 
         var monthHours = $("#MonthData_" + rowindex + "__Hours").val();
+        if (monthHours == 0) return; 
         var invoiceAmount = billingRate * monthHours;
         var consultantPay = payRate * monthHours;
-        console.log("month", rowindex);
-        console.log(monthHours);
-        console.log(invoiceAmount);
-        console.log(consultantPay);
 
         $("#MonthData_" + rowindex + "__InvoiceAmount").val(invoiceAmount);
         $("#MonthData_" + rowindex + "__ConsultantPay").val(consultantPay);
-        //console.log($("#ConsultantId").val());
     }
 
-    //var test = $("#ConsultantsList").val();
-    //var test = $('#consultantslist').val();
-    //console.log(test[1].Name)
+
 });
 
-//var test = document.getElementById('ConsultantsList').value;
-//var myValue = '@ViewBag.ConsultantsList';
-//alert(test[1].Name)
