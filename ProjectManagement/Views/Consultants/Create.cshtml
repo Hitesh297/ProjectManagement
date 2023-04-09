@@ -21,7 +21,7 @@
 
             <div class="col-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group input-group">
+                <div class="form-group input-group ">
                     <label asp-for="Name" class="input-group-text control-label"></label>
                     <input asp-for="Name" class="form-control" />
 
@@ -45,6 +45,7 @@
                         <option>Please Select</option>
                     </select>
                 </div>
+                <span asp-validation-for="RecruiterMemberId" class="text-danger"></span>
             </div>
 
             <div class="col-12">
@@ -54,6 +55,7 @@
                         <option>Please Select</option>
                     </select>
                 </div>
+                <span asp-validation-for="TeamMemberId" class="text-danger"></span>
             </div>
 
             <div class="col-12">
@@ -63,6 +65,7 @@
                         <option>Please Select</option>
                     </select>
                 </div>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
 
             <div class="col-12">
@@ -119,6 +122,7 @@
                                 <option>Please Select</option>
                             </select>
                         </div>
+                        <span asp-validation-for="TeamMemberId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -142,6 +146,7 @@
                                 <option>Please Select</option>
                             </select>
                         </div>
+                        <span asp-validation-for="MarketingManagerMemberId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -163,6 +168,7 @@
                                 <option>Please Select</option>
                             </select>
                         </div>
+                        <span asp-validation-for="ReferredByMemberId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -188,6 +194,7 @@
                                 <option>Please Select</option>
                             </select>
                         </div>
+                        <span asp-validation-for="PlacedByMemberId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -205,8 +212,8 @@
 
                     <div class="col">
                         <div class="form-group input-group">
-                            <label asp-for="NetMargin" class="control-label input-group-text alert-warning bg-warning"></label>
-                            <input readonly asp-for="NetMargin" class="form-control bg-warning alert-warning" />
+                            <label asp-for="NetMargin" class="control-label input-group-text border-warning bg-warning"></label>
+                            <input readonly asp-for="NetMargin" class="form-control bg-opacity-50 bg-warning border-warning" />
 
                         </div>
                         <span asp-validation-for="NetMargin" class="text-danger"></span>
@@ -228,7 +235,7 @@
 
 
 
-<div>
+<div class="pt-4">
     <a asp-action="Index">Back to List</a>
 </div>
 

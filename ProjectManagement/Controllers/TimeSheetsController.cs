@@ -59,14 +59,23 @@ namespace ProjectManagement.Controllers
             }
 
             var timeSheet = await _unitOfWork.TimeSheets.GetAllIncluding
-                (t => t.Consultant)
+                (t => t.MonthData)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeSheet == null)
             {
                 return NotFound();
             }
 
-            return View(timeSheet);
+            TimesheetsViewModel timeSheetVm = new TimesheetsViewModel();
+            timeSheetVm.Id = timeSheet.Id;
+            timeSheetVm.Year = timeSheet.Year;
+            timeSheetVm.ConsultantId = timeSheet.ConsultantId;
+            timeSheetVm.MonthData = timeSheet.MonthData.ToList();
+
+            ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAllActive().ToList(), "Id", "Name", timeSheet.ConsultantId);
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, timeSheet.Year);
+
+            return View(timeSheetVm);
         }
 
         // GET: TimeSheets/Create

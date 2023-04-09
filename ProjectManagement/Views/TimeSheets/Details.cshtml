@@ -1,4 +1,4 @@
-﻿@model ProjectManagement.Models.TimeSheet
+﻿@model ProjectManagement.Models.ViewModels.TimesheetsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -6,97 +6,115 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>TimeSheet</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Consultant)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Consultant.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-       @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JanBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JanBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FebBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FebBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MarBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MarBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AprBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AprBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MayBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MayBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JunBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JunBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JulBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JulBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AugBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AugBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SepBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SepBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OctBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OctBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NovBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NovBilling)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DecBilling)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DecBilling)
-        </dd>*@
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+<h4>Time Sheet</h4>
+<hr />
+
+
+
+    <div class="row g-3">
+        <div class="col-6">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ConsultantId" class="control-label"></label>
+                <select asp-for="ConsultantId" class="form-select" asp-items="ViewBag.ConsultantId" disabled>
+                    <option>Please Select</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                @*<input type="number" min="1900" max="2099" step="1" value="2016" asp-for="Year" class="form-control" />*@
+            <select asp-for="Year" class="form-select" asp-items="ViewBag.Year" disabled>
+                    <option>Please Select</option>
+                </select>
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+        </div>
+
+
+        @for (int i = 0; i < Model.MonthData.Count; i++)
+        {
+            <div class="col-12">
+                <div class="row">
+                    <input type="hidden" asp-for="MonthData[i].Id" value="@Model.MonthData[i].Id" />
+                    <input type="hidden" asp-for="MonthData[i].Month" value="@Model.MonthData[i].Month" />
+                    <input type="hidden" asp-for="MonthData[i].MonthInt" value="@Model.MonthData[i].MonthInt" />
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].Month" class="control-label">@Model.MonthData[i].Month</label>
+                            <div class="input-group">
+                                @*<span class="input-group-text">$</span>*@
+                            <input asp-for="MonthData[i].Hours" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <span asp-validation-for="MonthData[i].Hours" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].InvoiceAmount" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                            <input asp-for="MonthData[i].InvoiceAmount" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <span asp-validation-for="MonthData[i].InvoiceAmount" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].ConsultantPay" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                            <input asp-for="MonthData[i].ConsultantPay" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <span asp-validation-for="MonthData[i].ConsultantPay" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].PaidAmount" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                            <input asp-for="MonthData[i].PaidAmount" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <span asp-validation-for="MonthData[i].PaidAmount" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="MonthData[i].Variation" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                            <input asp-for="MonthData[i].Variation" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <span asp-validation-for="MonthData[i].Variation" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+
+
+<div class="pt-5">
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
