@@ -6,29 +6,32 @@
 
 <h1>Time Sheets</h1>
 
-<p>
+<div class="d-flex justify-content-between align-items-center pb-3">
     <a asp-action="Create">Create New</a>
-</p>
+    <div>
+        <input id="ExportToCSV" type="submit" value="Export" class="btn btn-success" />
+    </div>
+</div>
 
 <form action="/TimeSheets/Index" method="GET">
     <div class="row">
         <div class="col">
             <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">Consultant</span>
-            <select name="consultantId" class="form-select" asp-items="ViewBag.ConsultantId">
-                <option value="0">All</option>
-            </select>
-</div>
+                <span class="input-group-text" id="basic-addon1">Consultant</span>
+                <select id="consultantId" name="consultantId" class="form-select" asp-items="ViewBag.ConsultantId">
+                    <option value="0">All</option>
+                </select>
+            </div>
         </div>
         <div class="col">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Year</span>
-                <select name="year" class="form-select" asp-items="ViewBag.Year">
+                <select id="year" name="year" class="form-select" asp-items="ViewBag.Year">
                     <option value="-1">All</option>
                 </select>
             </div>
         </div>
-       
+
         <div class="col">
 
             <input style="width:100%" class="btn btn-primary" type="submit" value="Search" />
@@ -38,54 +41,69 @@
 </form>
 @if (Model != null && Model.Count() != 0)
 {
-    
 
-<table class="table overflow-auto table-bordered border-primary">
-    <thead>
-       
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model[0].ConsultantId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].Year)
-            </th>
+
+    <table class="table overflow-auto table-bordered border-primary">
+        <thead>
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].ConsultantId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Year)
+                </th>
 
                 @foreach (MonthData md in Model[0].MonthData)
                 {
-                <th>
-                    @Html.DisplayFor(model => md.Month)
-                </th>
-            } 
-            <th></th>
-        </tr>
-        
-    </thead>
-    <tbody>
-        @foreach (TimeSheet item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(Model => item.Consultant.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Year)
-                </td>
-
-              @foreach (MonthData md  in item.MonthData)
-                {
-                    <td style="white-space:nowrap">
-                        @Html.DisplayFor(Model => md.Hours)
-                    </td>
+                    <th>
+                        @Html.DisplayFor(model => md.Month)
+                    </th>
                 }
-                   
-                <td style="white-space:nowrap">
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+
+        </thead>
+        <tbody>
+            @foreach (TimeSheet item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(Model => item.Consultant.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Year)
+                    </td>
+
+                    @foreach (MonthData md in item.MonthData)
+                    {
+                        <td style="white-space:nowrap">
+                            @Html.DisplayFor(Model => md.Hours)
+                        </td>
+                    }
+
+                    <td style="white-space:nowrap">
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $("#ExportToCSV").click(function () {
+
+                var consultantId = $("#consultantId").val();
+                var year = $("#year").val();
+                var url = '@Url.Action("ExportAsCSV", "TimeSheets")' + '/' + consultantId + '/' + year;
+                window.location.href = url;
+
+            });
+        });
+    </script>
 }
+

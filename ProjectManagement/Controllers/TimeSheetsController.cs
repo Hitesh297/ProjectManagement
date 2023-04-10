@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -40,12 +42,12 @@ namespace ProjectManagement.Controllers
                 }
                 applicationDbContext = applicationDbContext.Where(x => x.Year == year);
             }
-            
+
             ViewData["ConsultantId"] = new SelectList(_unitOfWork.Consultants.GetAll().ToList(), "Id", "Name", consultantId);
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
 
-            var data = await applicationDbContext.Include(x => x.MonthData).OrderBy(x=>x.ConsultantId).OrderBy(y=>y.Year).ToListAsync();
-            
+            var data = await applicationDbContext.Include(x => x.MonthData).OrderBy(x => x.ConsultantId).OrderBy(y => y.Year).ToListAsync();
+
 
             return View(data);
         }
@@ -104,14 +106,14 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm]TimesheetsViewModel timeSheetsForm)
+        public async Task<IActionResult> Create([FromForm] TimesheetsViewModel timeSheetsForm)
         {
 
             TimeSheet newTimeSheet = new TimeSheet();
             newTimeSheet.Year = timeSheetsForm.Year;
             newTimeSheet.ConsultantId = timeSheetsForm.ConsultantId;
             newTimeSheet.MonthData = timeSheetsForm.MonthData;
-            
+
 
             if (ModelState.IsValid)
             {
@@ -132,7 +134,7 @@ namespace ProjectManagement.Controllers
                 return NotFound();
             }
 
-            var timeSheet = await _unitOfWork.TimeSheets.GetAllIncluding(x=>x.MonthData).Where(x=>x.Id == id).FirstAsync();
+            var timeSheet = await _unitOfWork.TimeSheets.GetAllIncluding(x => x.MonthData).Where(x => x.Id == id).FirstAsync();
 
             if (timeSheet == null)
             {
@@ -156,7 +158,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [FromForm]TimeSheet timeSheet)
+        public async Task<IActionResult> Edit(int id, [FromForm] TimeSheet timeSheet)
         {
             if (id != timeSheet.Id)
             {
@@ -222,14 +224,54 @@ namespace ProjectManagement.Controllers
             {
                 _unitOfWork.TimeSheets.Remove(timeSheet);
             }
-            
+
             await _unitOfWork.Complete();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TimeSheetExists(int id)
         {
-          return (_unitOfWork.TimeSheets?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_unitOfWork.TimeSheets?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpGet]
+        [Route("Timesheets/ExportAsCSV/{consultantId}/{year}")]
+        public IActionResult ExportAsCSV(int consultantId, int year)
+        {
+            IQueryable<TimeSheet> applicationDbContext = _unitOfWork.TimeSheets.GetAllIncluding(t => t.Consultant);
+            if (consultantId != 0)
+            {
+                applicationDbContext = applicationDbContext.Where(x => x.Consultant.Id == consultantId);
+            }
+
+            if (year != 0 && year != -1)
+            {
+
+                applicationDbContext = applicationDbContext.Where(x => x.Year == year);
+            }
+
+            var timeSheets = applicationDbContext.Include(x => x.MonthData).OrderBy(x => x.ConsultantId).OrderBy(y => y.Year).ToList();
+            StringBuilder sb = new StringBuilder();
+            if (timeSheets.Count != 0)
+            {
+                sb.Append($"Consultant Name,Year");
+                foreach (var month in timeSheets[0].MonthData)
+                {
+                    sb.Append($",{month.Month}");
+                }
+                sb.Append("\r\n");
+                foreach (var item in timeSheets)
+                {
+                    sb.Append($"{item.Consultant.Name},{item.Year}");
+                    foreach (var timesheet in item.MonthData)
+                    {
+                        sb.Append($",{timesheet.Hours}");
+                    }
+                    sb.Append("\r\n");
+                }
+            }
+
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "Grid.csv");
         }
     }
 }
