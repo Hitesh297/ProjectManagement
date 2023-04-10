@@ -271,7 +271,7 @@ namespace ProjectManagement.Controllers
                 }
             }
 
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "Grid.csv");
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "TimeSheets.csv");
         }
     }
 }
