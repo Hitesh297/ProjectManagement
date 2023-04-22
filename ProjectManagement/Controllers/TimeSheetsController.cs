@@ -254,7 +254,7 @@ namespace ProjectManagement.Controllers
             StringBuilder sb = new StringBuilder();
             if (timeSheets.Count != 0)
             {
-                sb.Append($"Consultant Name,Year");
+                sb.Append($"Consultant Id,Consultant Name,Year");
                 foreach (var month in timeSheets[0].MonthData)
                 {
                     sb.Append($",{month.Month}");
@@ -262,7 +262,7 @@ namespace ProjectManagement.Controllers
                 sb.Append("\r\n");
                 foreach (var item in timeSheets)
                 {
-                    sb.Append($"{item.Consultant.Name},{item.Year}");
+                    sb.Append($"{item.Consultant.UniqueConsultantId},{item.Consultant.Name},{item.Year}");
                     foreach (var timesheet in item.MonthData)
                     {
                         sb.Append($",{timesheet.Hours}");
