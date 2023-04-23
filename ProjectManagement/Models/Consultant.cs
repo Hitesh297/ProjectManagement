@@ -77,5 +77,16 @@ namespace ProjectManagement.Models
         public decimal CreditCardCost { get; set; }
         [Display(Name = "Net Margin")]
         public decimal NetMargin { get; set; }
+
+        public bool Equals(Consultant x, Consultant y)
+        {
+            return x.Id == y.Id;
+        }
+
+        public int GetHashCode(Consultant obj)
+        {
+            return obj.Id.GetHashCode() ^
+                obj.Name.GetHashCode();
+        }
     }
 }

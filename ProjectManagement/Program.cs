@@ -40,6 +40,7 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -48,14 +49,18 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=dashboard}/{action=index}/{id?}");
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapDefaultControllerRoute().RequireAuthorization();
 });
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
 app.MapRazorPages();
 
 app.Run();

@@ -41,7 +41,7 @@ namespace ProjectManagement.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "User nor found!.");
+                ModelState.AddModelError(string.Empty, "User not found!.");
                 return View("Error");
             }
             else

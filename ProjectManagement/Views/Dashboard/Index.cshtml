@@ -1,0 +1,58 @@
+﻿@model ProjectManagement.Models.ViewModels.ConsultantByClientVM
+
+@{
+    ViewData["Title"] = "Dashboard Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">This is Dashboard</h1>
+</div>
+
+@if (Model != null && Model.ClientByMonthList.Count() != 0)
+{
+    <table class="table overflow-auto table-bordered border-primary">
+        <thead>
+
+            <tr>
+                <th>
+
+                    Month
+                </th>
+
+
+                @foreach (var client in Model.ClientByMonthList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
+                {
+                    <th>
+                        @Html.DisplayFor(model => client.Key.ClientName)
+                    </th>
+                }
+
+            </tr>
+
+        </thead>
+        <tbody>
+            @{
+                foreach (var month in Model.ClientByMonthList.GroupBy(x => x.Month).OrderBy(x => x.Key))
+                {
+                    <tr>
+                        <td>
+                            @month.Key
+                        </td>
+                        @foreach (var client in Model.ClientByMonthList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
+                        {
+
+                            <td>
+                                @{
+                                    var ActiveConsultant = Model.ClientByMonthList.Where(x => x.Client.Id == client.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.ActiveConsultants;
+                                    var activeConsultantNumber = ActiveConsultant == null ? 0 : ActiveConsultant;
+                                    @activeConsultantNumber
+                                }
+                                </td>
+                        }
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+}

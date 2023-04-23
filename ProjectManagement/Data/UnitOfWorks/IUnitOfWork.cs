@@ -8,6 +8,7 @@ namespace ProjectManagement.Data.UnitOfWorks
         IConsultantRepository Consultants { get; }
         ITeamMemberRepository TeamMembers { get; }
         ITimeSheetRepository TimeSheets { get; }
+        IMonthDataRepository MonthData { get; }
         Task<int> Complete();
     }
 }

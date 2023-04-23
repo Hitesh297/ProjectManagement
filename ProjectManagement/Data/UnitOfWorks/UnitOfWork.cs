@@ -12,11 +12,13 @@ namespace ProjectManagement.Data.UnitOfWorks
             Consultants = new ConsultantRepository(_context);
             TeamMembers = new TeamMemberRepository(_context);
             TimeSheets = new TimeSheetRepository(_context);
+            MonthData = new MonthDataRepository(_context);
         }
         public IClientRepository Clients { get; private set; }
         public IConsultantRepository Consultants { get; private set; }
         public ITeamMemberRepository TeamMembers { get; private set; }
         public ITimeSheetRepository TimeSheets { get; private set; }
+        public IMonthDataRepository MonthData { get; private set; }
         public async Task<int> Complete()
         {
             return await _context.SaveChangesAsync();
