@@ -96,6 +96,17 @@
                         <span asp-validation-for="MonthData[i].Variation" class="text-danger"></span>
                     </div>
 
+                <div class="col-2">
+                    <div class="form-group">
+                        <label asp-for="MonthData[i].NetProfit" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input asp-for="MonthData[i].NetProfit" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <span asp-validation-for="MonthData[i].NetProfit" class="text-danger"></span>
+                </div>
+
                 </div>
             </div>
         }

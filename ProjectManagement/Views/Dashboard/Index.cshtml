@@ -1,58 +1,116 @@
-﻿@model ProjectManagement.Models.ViewModels.ConsultantByClientVM
+﻿@using System.Globalization;
+@model ProjectManagement.Models.ViewModels.DashboardVM
 
 @{
     ViewData["Title"] = "Dashboard Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">This is Dashboard</h1>
-</div>
+<div class="container-fluid">
 
-@if (Model != null && Model.ClientByMonthList.Count() != 0)
-{
-    <table class="table overflow-auto table-bordered border-primary">
-        <thead>
-
-            <tr>
-                <th>
-
-                    Month
-                </th>
-
-
-                @foreach (var client in Model.ClientByMonthList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
+    <main class="">
+        <div class="row">
+            <h2>Consultants by Client</h2>
+            <div class="table-responsive">
+                @if (Model != null && Model.ConsultantByClientVM.ClientByMonthList.Count() != 0)
                 {
-                    <th>
-                        @Html.DisplayFor(model => client.Key.ClientName)
-                    </th>
-                }
+                    <table id="ConsultantByClientTable" class="table table-striped table-bordered">
+                        <thead>
 
-            </tr>
+                            <tr>
+                                <th>
+                                    Month
+                                </th>
 
-        </thead>
-        <tbody>
-            @{
-                foreach (var month in Model.ClientByMonthList.GroupBy(x => x.Month).OrderBy(x => x.Key))
-                {
-                    <tr>
-                        <td>
-                            @month.Key
-                        </td>
-                        @foreach (var client in Model.ClientByMonthList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
-                        {
-
-                            <td>
-                                @{
-                                    var ActiveConsultant = Model.ClientByMonthList.Where(x => x.Client.Id == client.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.ActiveConsultants;
-                                    var activeConsultantNumber = ActiveConsultant == null ? 0 : ActiveConsultant;
-                                    @activeConsultantNumber
+                                @foreach (var client in Model.ConsultantByClientVM.ClientByMonthList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
+                                {
+                                    <th>
+                                        @Html.DisplayFor(model => client.Key.ClientName)
+                                    </th>
                                 }
-                                </td>
-                        }
-                    </tr>
-                }
-            }
 
-        </tbody>
-    </table>
-}
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var month in Model.ConsultantByClientVM.ClientByMonthList.GroupBy(x => x.Month).OrderBy(x => x.Key))
+                                {
+                                    <tr>
+                                        <td>
+                                            @DateTimeFormatInfo.CurrentInfo.GetMonthName(month.Key)
+                                        </td>
+                                        @foreach (var client in Model.ConsultantByClientVM.ClientByMonthList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
+                                        {
+
+                                            <td>
+                                                @{
+                                                    var ActiveConsultant = Model.ConsultantByClientVM.ClientByMonthList.Where(x => x.Client.Id == client.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.ActiveConsultants;
+                                                    var activeConsultantNumber = ActiveConsultant == null ? 0 : ActiveConsultant;
+                                                    @activeConsultantNumber
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <h2>Revenue By Recruiter</h2>
+            <div class="table-responsive">
+                @if (Model != null && Model.RevenueByRecruiterVM.RecruiterByProfitList.Count() != 0)
+                {
+                    <table id="RevenueByRecruiterTable" class="table table-striped table-bordered">
+                        <thead>
+
+                            <tr>
+                                <th>
+                                    Recruiter
+                                </th>
+
+                                 @foreach (var month in Model.RevenueByRecruiterVM.RecruiterByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
+                                {
+                                    <th>
+                                        @DateTimeFormatInfo.CurrentInfo.GetMonthName(month.Key)
+                                    </th>
+                                }
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var recruiterGroup in Model.RevenueByRecruiterVM.RecruiterByProfitList.GroupBy(x => x.Recruiter).OrderBy(x => x.Key.Name))
+                                {
+                                    <tr>
+                                        <td>
+                                            @recruiterGroup.Key.Name
+                                        </td>
+                                        @foreach (var month in Model.RevenueByRecruiterVM.RecruiterByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
+                                        {
+
+                                            <td>
+                                                @{
+                                                    var monthProfit = Model.RevenueByRecruiterVM.RecruiterByProfitList.Where(x => x.Recruiter.Id == recruiterGroup.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.NetProfitByRecruiter;
+                                                    var monthNetProfitNumber = monthProfit == null ? 0 : monthProfit;
+                                                    @monthNetProfitNumber
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </main>
+
+</div>

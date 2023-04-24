@@ -30,6 +30,8 @@ namespace ProjectManagement.Models
         public decimal? PaidAmount { get; set; }
         [Display(Name = "Variation")]
         public decimal? Variation { get; set; }
+        [Display(Name = "Net Profit")]
+        public decimal? NetProfit { get; set; }
         [ForeignKey("Timesheet")]
         public int TimesheetId { get; set; }
         public virtual TimeSheet? TimeSheet { get; set; }

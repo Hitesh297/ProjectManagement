@@ -41,6 +41,7 @@ $(document).ready(function () {
         var consultantId;
         var billingRate = 0;
         var payRate = 0;
+        var netMargin = 0;
         if ($("#ConsultantId").val() == 'Please Select') {
             $("#ConsultantId").focus();
             alert("Please select consultant from dropdown.");
@@ -51,6 +52,7 @@ $(document).ready(function () {
                 if (consultant.Id == consultantId) {
                     billingRate = consultant.BillingRate;
                     payRate = consultant.PayRate;
+                    netMargin = consultant.NetMargin;
                 }
 
             });
@@ -61,9 +63,12 @@ $(document).ready(function () {
         if (monthHours == 0) return; 
         var invoiceAmount = billingRate * monthHours;
         var consultantPay = payRate * monthHours;
+        var netProfit = netMargin * monthHours;
 
         $("#MonthData_" + rowindex + "__InvoiceAmount").val(invoiceAmount);
         $("#MonthData_" + rowindex + "__ConsultantPay").val(consultantPay);
+        $("#MonthData_" + rowindex + "__NetProfit").val(netProfit);
+        console.log("Calculation Complete");
     }
 
 

@@ -22,5 +22,15 @@ namespace ProjectManagement.Models
         public virtual ICollection<Consultant>? ReferredByInConsultants { get; set; }
         [InverseProperty("PlacedBy")]
         public virtual ICollection<Consultant>? PlacedByInConsultants { get; set; }
+        public bool Equals(TeamMember x, TeamMember y)
+        {
+            return x.Id == y.Id;
+        }
+
+        public int GetHashCode(TeamMember obj)
+        {
+            return obj.Id.GetHashCode() ^
+                obj.Name.GetHashCode();
+        }
     }
 }
