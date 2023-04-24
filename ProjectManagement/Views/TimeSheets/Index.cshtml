@@ -42,55 +42,56 @@
 @if (Model != null && Model.Count() != 0)
 {
 
+    <div class="table-responsive">
+        <table class="table table-bordered border-primary">
+            <thead>
 
-    <table class="table overflow-auto table-bordered border-primary">
-        <thead>
-
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].ConsultantId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].Year)
-                </th>
-
-                @foreach (MonthData md in Model[0].MonthData)
-                {
-                    <th>
-                        @Html.DisplayFor(model => md.Month)
-                    </th>
-                }
-                <th></th>
-            </tr>
-
-        </thead>
-        <tbody>
-            @foreach (TimeSheet item in Model)
-            {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(Model => item.Consultant.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.Year)
-                    </td>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model[0].ConsultantId)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model[0].Year)
+                    </th>
 
-                    @foreach (MonthData md in item.MonthData)
+                    @foreach (MonthData md in Model[0].MonthData)
                     {
-                        <td style="white-space:nowrap">
-                            @Html.DisplayFor(Model => md.Hours)
-                        </td>
+                        <th scope="col">
+                            @Html.DisplayFor(model => md.Month)
+                        </th>
                     }
-
-                    <td style="white-space:nowrap">
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
+                    <th scope="col"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+
+            </thead>
+            <tbody>
+                @foreach (TimeSheet item in Model)
+                {
+                    <tr>
+                        <th scope="row">
+                            @Html.DisplayFor(Model => item.Consultant.Name)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(model => item.Year)
+                        </td>
+
+                        @foreach (MonthData md in item.MonthData)
+                        {
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(Model => md.Hours)
+                            </td>
+                        }
+
+                        <td style="white-space:nowrap">
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     <script type="text/javascript">
         $(document).ready(function () {
 
