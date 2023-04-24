@@ -8,7 +8,8 @@
 <div class="container-fluid">
 
     <main class="">
-        <div class="row">
+        <div class="row g-3">
+            <div class="col-12">
             <h2>Consultants by Client</h2>
             <div class="table-responsive">
                 @if (Model != null && Model.ConsultantByClientVM.ClientByMonthList.Count() != 0)
@@ -60,7 +61,7 @@
             </div>
         </div>
 
-        <div class="row">
+            <div class="col-12">
             <h2>Revenue By Recruiter</h2>
             <div class="table-responsive">
                 @if (Model != null && Model.RevenueByRecruiterVM.RecruiterByProfitList.Count() != 0)
@@ -112,7 +113,7 @@
             </div>
         </div>
 
-        <div class="row">
+            <div class="col-12">
             <h2>Revenue By Client</h2>
             <div class="table-responsive">
                 @if (Model != null && Model.RevenueByClientVM.ClientByProfitList.Count() != 0)
@@ -162,6 +163,7 @@
                     </table>
                 }
             </div>
+        </div>
         </div>
     </main>
 
