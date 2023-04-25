@@ -27,7 +27,7 @@
 
     public class ConsultantByClientVM
     {
-        public List<ClientConsultantsByMonth>? ClientByMonthList { get; set; }
+        public List<ClientConsultantsByMonth>? ClientByConsultantList { get; set; }
 
     }
 
