@@ -18,6 +18,7 @@ builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<IConsultantRepository, ConsultantRepository>();
 builder.Services.AddTransient<ITeamMemberRepository, TeamMemberRepository>();
 builder.Services.AddTransient<ITimeSheetRepository, TimeSheetRepository>();
+builder.Services.AddTransient<IMonthDataRepository, MonthDataRepository>();
 #endregion
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
@@ -51,12 +52,13 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=dashboard}/{action=index}/{id?}");
+    pattern: "{controller=dashboard}/{action=index}/{id?}").RequireAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute().RequireAuthorization();
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapDefaultControllerRoute().RequireAuthorization();
+  
+//});
 
 
 

@@ -5,14 +5,20 @@ namespace ProjectManagement.Data.UnitOfWorks
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        public UnitOfWork(ApplicationDbContext context)
+
+        public UnitOfWork(ApplicationDbContext context, 
+            IClientRepository clientRepository, 
+            IConsultantRepository consultantRepository, 
+            ITeamMemberRepository teamMemberRepository,
+            ITimeSheetRepository timeSheetRepository,
+            IMonthDataRepository monthDataRepository)
         {
             _context = context;
-            Clients = new ClientRepository(_context);
-            Consultants = new ConsultantRepository(_context);
-            TeamMembers = new TeamMemberRepository(_context);
-            TimeSheets = new TimeSheetRepository(_context);
-            MonthData = new MonthDataRepository(_context);
+            Clients = clientRepository;
+            Consultants = consultantRepository;
+            TeamMembers = teamMemberRepository;
+            TimeSheets = timeSheetRepository;
+            MonthData = monthDataRepository;
         }
         public IClientRepository Clients { get; private set; }
         public IConsultantRepository Consultants { get; private set; }

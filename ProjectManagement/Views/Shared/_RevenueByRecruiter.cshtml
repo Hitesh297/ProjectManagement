@@ -6,8 +6,8 @@
 @{
 }
 
-<section id="RevenueByRecruiterSection">
-    <div class="d-flex justify-content-between align-items-center">
+<section class="card shadow" id="RevenueByRecruiterSection">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <div>
             <h2>Revenue By Recruiter</h2>
         </div>
@@ -19,7 +19,7 @@
         </div>
     </div>
     
-    <div class="table-responsive">
+    <div class="card-body table-responsive">
         @if (Model != null && Model.RecruiterByProfitList.Count() != 0)
         {
             <table id="RevenueByRecruiterTable" class="table table-striped table-bordered">
