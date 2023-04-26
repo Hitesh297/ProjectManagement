@@ -13,111 +13,12 @@
                 <partial name="_ConsultantByClient" model="Model.ConsultantByClientVM" />
             </div>
 
-            <div class="col-12">
-                <h2>Revenue By Recruiter</h2>
-                <div class="table-responsive">
-                    @if (Model != null && Model.RevenueByRecruiterVM.RecruiterByProfitList.Count() != 0)
-                    {
-                        <table id="RevenueByRecruiterTable" class="table table-striped table-bordered">
-                            <thead class="table-dark">
-
-                                <tr>
-                                    <th>
-                                        Recruiter
-                                    </th>
-
-                                    @foreach (var month in Model.RevenueByRecruiterVM.RecruiterByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
-                                    {
-                                        <th>
-                                            @DateTimeFormatInfo.CurrentInfo.GetMonthName(month.Key)
-                                        </th>
-                                    }
-
-                                </tr>
-
-                            </thead>
-                            <tbody>
-                                @{
-                                    foreach (var recruiterGroup in Model.RevenueByRecruiterVM.RecruiterByProfitList.GroupBy(x => x.Recruiter).OrderBy(x => x.Key.Name))
-                                    {
-                                        <tr>
-                                            <th scope="row">
-                                                @recruiterGroup.Key.Name
-                                            </th>
-                                            @foreach (var month in Model.RevenueByRecruiterVM.RecruiterByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
-                                            {
-
-                                                <td NOWRAP>
-                                                    $
-                                                    @{
-                                                        var monthProfit = Model.RevenueByRecruiterVM.RecruiterByProfitList.Where(x => x.Recruiter.Id == recruiterGroup.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.NetProfitByRecruiter;
-                                                        var monthNetProfitNumber = monthProfit == null ? 0 : monthProfit;
-                                                        @monthNetProfitNumber
-                                                    }
-                                                    
-                                                </td>
-                                            }
-                                        </tr>
-                                    }
-                                }
-
-                            </tbody>
-                        </table>
-                    }
-                </div>
+            <div id="RevenueByRecruiterPartial" class="col-12">
+                <partial name="_RevenueByRecruiter" model="Model.RevenueByRecruiterVM" />
             </div>
 
-            <div class="col-12">
-                <h2>Revenue By Client</h2>
-                <div class="table-responsive">
-                    @if (Model != null && Model.RevenueByClientVM.ClientByProfitList.Count() != 0)
-                    {
-                        <table id="RevenueByRecruiterTable" class="table table-striped table-bordered">
-                            <thead class="table-dark">
-
-                                <tr>
-                                    <th>
-                                        Client
-                                    </th>
-
-                                    @foreach (var month in Model.RevenueByClientVM.ClientByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
-                                    {
-                                        <th>
-                                            @DateTimeFormatInfo.CurrentInfo.GetMonthName(month.Key)
-                                        </th>
-                                    }
-
-                                </tr>
-
-                            </thead>
-                            <tbody>
-                                @{
-                                    foreach (var clientGroup in Model.RevenueByClientVM.ClientByProfitList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
-                                    {
-                                        <tr>
-                                            <th scope="row">
-                                                @clientGroup.Key.ClientName
-                                            </th>
-                                            @foreach (var month in Model.RevenueByClientVM.ClientByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
-                                            {
-                                                <td NOWRAP>
-                                                $
-                                                    @{
-                                                        var monthProfit = Model.RevenueByClientVM.ClientByProfitList.Where(x => x.Client.Id == clientGroup.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.NetProfitByClient;
-                                                        var monthNetProfitNumber = monthProfit == null ? 0 : monthProfit;
-                                                        @monthNetProfitNumber
-                                                    }
-                                                    
-                                                </td>
-                                            }
-                                        </tr>
-                                    }
-                                }
-
-                            </tbody>
-                        </table>
-                    }
-                </div>
+            <div id="RevenueByClientPartial" class="col-12">
+                <partial name="_RevenueByClient" model="Model.RevenueByClientVM" />
             </div>
         </div>
     </main>

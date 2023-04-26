@@ -31,7 +31,7 @@ namespace ProjectManagement.Controllers
 
             dashboardVM.ConsultantByClientVM = GetConsultantByClientVM(currentYear);
             dashboardVM.RevenueByRecruiterVM = GetRevenueByRecruiterVM(currentYear);
-            dashboardVM.RevenueByClientVM = RevenueByClientVM(currentYear);
+            dashboardVM.RevenueByClientVM = GetRevenueByClientVM(currentYear);
 
             ViewData["Year"] = new SelectList(Constants.YearDropdown, currentYear);
 
@@ -42,6 +42,18 @@ namespace ProjectManagement.Controllers
         {
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
             return PartialView("_ConsultantByClient", GetConsultantByClientVM(year));
+        }
+
+        public IActionResult RevenueByRecruiterPartial(int year)
+        {
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
+            return PartialView("_RevenueByRecruiter", GetRevenueByRecruiterVM(year));
+        }
+
+        public IActionResult RevenueByClientPartial(int year)
+        {
+            ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
+            return PartialView("_RevenueByClient", GetRevenueByClientVM(year));
         }
 
         #region Private Methods
@@ -82,7 +94,7 @@ namespace ProjectManagement.Controllers
             return revenueByRecruiterVM;
         }
 
-        private RevenueByClientVM RevenueByClientVM(int year)
+        private RevenueByClientVM GetRevenueByClientVM(int year)
         {
             RevenueByClientVM revenueByClientVM = new RevenueByClientVM();
             ///Calculate Profit by Client for each month

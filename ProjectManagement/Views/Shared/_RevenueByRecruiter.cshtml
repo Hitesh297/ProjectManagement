@@ -1,37 +1,36 @@
 ﻿@using System.Globalization;
-@model ProjectManagement.Models.ViewModels.ConsultantByClientVM
+@model ProjectManagement.Models.ViewModels.RevenueByRecruiterVM
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
 
-
-
-<section id="ConsultantByClientSection">
+<section id="RevenueByRecruiterSection">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h2>Consultants by Client</h2>
+            <h2>Revenue By Recruiter</h2>
         </div>
         <div class="input-group" style="width:150px;">
             <span class="input-group-text bg-dark fw-bold text-white border-dark" id="yearDropdownLable">Year</span>
-            <select name="consultantByClientYear" id="consultantByClientYear" class="form-select border-dark fw-bold" asp-items="ViewBag.Year">
-                
+            <select name="revenueByRecruiterYear" id="revenueByRecruiterYear" class="form-select border-dark fw-bold" asp-items="ViewBag.Year">
+
             </select>
         </div>
     </div>
+    
     <div class="table-responsive">
-        @if (Model != null && Model.ClientByConsultantList.Count() != 0)
+        @if (Model != null && Model.RecruiterByProfitList.Count() != 0)
         {
-            <table id="ConsultantByClientTable" class="table table-striped table-bordered">
+            <table id="RevenueByRecruiterTable" class="table table-striped table-bordered">
                 <thead class="table-dark">
 
                     <tr>
                         <th>
-                            Client
+                            Recruiter
                         </th>
 
-                        @foreach (var month in Model.ClientByConsultantList.GroupBy(x => x.Month).OrderBy(x => x.Key))
+                        @foreach (var month in Model.RecruiterByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
                         {
                             <th>
                                 @DateTimeFormatInfo.CurrentInfo.GetMonthName(month.Key)
@@ -43,19 +42,21 @@
                 </thead>
                 <tbody>
                     @{
-                        foreach (var clientGroup in Model.ClientByConsultantList.GroupBy(x => x.Client).OrderBy(x => x.Key.ClientName))
+                        foreach (var recruiterGroup in Model.RecruiterByProfitList.GroupBy(x => x.Recruiter).OrderBy(x => x.Key.Name))
                         {
                             <tr>
                                 <th scope="row">
-                                    @clientGroup.Key.ClientName
+                                    @recruiterGroup.Key.Name
                                 </th>
-                                @foreach (var month in Model.ClientByConsultantList.GroupBy(x => x.Month).OrderBy(x => x.Key))
+                                @foreach (var month in Model.RecruiterByProfitList.GroupBy(x => x.Month).OrderBy(x => x.Key))
                                 {
+
                                     <td NOWRAP>
+                                        $
                                         @{
-                                            var ActiveConsultant = Model.ClientByConsultantList.Where(x => x.Client.Id == clientGroup.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.ActiveConsultants;
-                                            var activeConsultantNumber = ActiveConsultant == null ? 0 : ActiveConsultant;
-                                            @activeConsultantNumber
+                                            var monthProfit = Model.RecruiterByProfitList.Where(x => x.Recruiter.Id == recruiterGroup.Key.Id).Where(x => x.Month == month.Key).FirstOrDefault()?.NetProfitByRecruiter;
+                                            var monthNetProfitNumber = monthProfit == null ? 0 : monthProfit;
+                                            @monthNetProfitNumber
                                         }
 
                                     </td>
@@ -66,19 +67,19 @@
 
                 </tbody>
             </table>
-        } else
+        }
+        else
         {
             <p>No Data Found</p>
         }
     </div>
     <script type="text/javascript">
 
-        $('select[name="consultantByClientYear"]').change(function () {
+        $('select[name="revenueByRecruiterYear"]').change(function () {
             console.log('Test');
             var year = $(this).val();
-            $('#ConsultantByClientPartial').load("/Dashboard/ConsultantByClientPartial?year=" + year);
+            $('#RevenueByRecruiterPartial').load("/Dashboard/RevenueByRecruiterPartial?year=" + year);
         });
 
     </script>
 </section>
-
