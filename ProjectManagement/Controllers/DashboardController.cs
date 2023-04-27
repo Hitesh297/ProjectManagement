@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectManagement.Data.UnitOfWorks;
 using ProjectManagement.Models;
 using ProjectManagement.Models.ViewModels;
+using System.ComponentModel.Design;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectManagement.Controllers
@@ -19,6 +20,7 @@ namespace ProjectManagement.Controllers
         public IActionResult Index()
         {
             int currentYear = DateTime.Now.Year;
+            int defaultCompanyId = 1;
             DashboardVM dashboardVM = new DashboardVM();
 
 
@@ -29,39 +31,47 @@ namespace ProjectManagement.Controllers
             dashboardVM.RevenueByRecruiterVM.RecruiterByProfitList = new List<RecruiterProfitByMonth>();
             dashboardVM.RevenueByClientVM.ClientByProfitList = new List<ClientProfitByMonth>();
 
-            dashboardVM.ConsultantByClientVM = GetConsultantByClientVM(currentYear);
+            dashboardVM.ConsultantByClientVM = GetConsultantByClientVM(currentYear,defaultCompanyId);
             dashboardVM.RevenueByRecruiterVM = GetRevenueByRecruiterVM(currentYear);
             dashboardVM.RevenueByClientVM = GetRevenueByClientVM(currentYear);
 
             ViewData["Year"] = new SelectList(Constants.YearDropdown, currentYear);
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown,"Id","Name", defaultCompanyId);
 
             return View(dashboardVM);
         }
 
-        public IActionResult ConsultantByClientPartial(int year)
+        public IActionResult ConsultantByClientPartial(int year, int companyId)
         {
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
-            return PartialView("_ConsultantByClient", GetConsultantByClientVM(year));
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", companyId);
+            return PartialView("_ConsultantByClient", GetConsultantByClientVM(year, companyId));
         }
 
-        public IActionResult RevenueByRecruiterPartial(int year)
+        public IActionResult RevenueByRecruiterPartial(int year, int companyId)
         {
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", companyId);
             return PartialView("_RevenueByRecruiter", GetRevenueByRecruiterVM(year));
         }
 
-        public IActionResult RevenueByClientPartial(int year)
+        public IActionResult RevenueByClientPartial(int year, int companyId)
         {
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", companyId);
             return PartialView("_RevenueByClient", GetRevenueByClientVM(year));
         }
 
         #region Private Methods
-        private ConsultantByClientVM GetConsultantByClientVM(int year)
+        private ConsultantByClientVM GetConsultantByClientVM(int year, int companyId)
         {
             ConsultantByClientVM consultantByClientVM = new ConsultantByClientVM();
-            IQueryable<MonthData> timesheets = _unitOfWork.MonthData.GetAllIncluding(t => t.TimeSheet, t => t.TimeSheet.Consultant, t => t.TimeSheet.Consultant.Client);
-            var active = timesheets.Where(x => x.Hours != null && x.Hours != 0).Where(y => y.TimeSheet.Year == year).ToList();
+            IQueryable<MonthData> timesheets = _unitOfWork.MonthData.GetAllIncluding(t => t.TimeSheet,
+                t => t.TimeSheet.Consultant,
+                t => t.TimeSheet.Consultant.Client)
+                .Where(y=>y.TimeSheet.Consultant.CompanyId == companyId);
+            var active = timesheets.Where(x => x.Hours != null && x.Hours != 0).
+                Where(y => y.TimeSheet.Year == year).ToList();
 
             var results = active.GroupBy(n => new { n.TimeSheet.Consultant.Client, n.MonthInt })
                 .Select(g => new ClientConsultantsByMonth

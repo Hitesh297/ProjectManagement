@@ -9,6 +9,8 @@ namespace ProjectManagement.Models
         public int Id { get; set; }
         [Display(Name = "Consultant Id")]
         public string UniqueConsultantId { get; set; }
+        [Display(Name = "Company Name")]
+        public int CompanyId { get; set; }
         [Display(Name = "Consultant Name")]
         public string Name { get; set; }
         [Display(Name = "Recruiter")]

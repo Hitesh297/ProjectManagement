@@ -66,6 +66,7 @@ namespace ProjectManagement.Controllers
             ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAll().ToList(), "Id", "Name", consultant.TeamMemberId);
             ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAll().ToList(), "Id", "ClientName", consultant.ClientId);
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", consultant.CompanyId);
 
             return View(consultant);
         }
@@ -81,6 +82,7 @@ namespace ProjectManagement.Controllers
             ViewData["TeamLeadMemberId"] = selectListItems;
             ViewData["TeamMemberId"] = selectListItems;
             ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive().ToList(), "Id", "ClientName");
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown,"Id","Name");
             return View();
         }
 
@@ -89,7 +91,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin,UniqueConsultantId,ClientId")] Consultant consultant)
+        public async Task<IActionResult> Create([Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin,UniqueConsultantId,ClientId,CompanyId")] Consultant consultant)
         {
             if (ModelState.IsValid)
             {
@@ -104,6 +106,7 @@ namespace ProjectManagement.Controllers
             ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamMemberId);
             ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive(), "Id", "ClientName", consultant.ClientId);
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", consultant.CompanyId);
             return View(consultant);
         }
 
@@ -127,6 +130,7 @@ namespace ProjectManagement.Controllers
             ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamMemberId);
             ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive(), "Id", "ClientName", consultant.ClientId);
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", consultant.CompanyId);
             return View(consultant);
         }
 
@@ -135,7 +139,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin,UniqueConsultantId,ClientId")] Consultant consultant)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RecruiterMemberId,TeamLeadMemberId,MarketingManagerMemberId,TeamMemberId,ReferredByMemberId,PlacedByMemberId,StartDate,EndDate,BillingRate,PayRate,TeamLeadFee,MarketingFee,ReferralFees,PlacementFee,CreditCardCost,NetMargin,UniqueConsultantId,ClientId,CompanyId")] Consultant consultant)
         {
             if (id != consultant.Id)
             {
@@ -169,6 +173,7 @@ namespace ProjectManagement.Controllers
             ViewData["TeamLeadMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamLeadMemberId);
             ViewData["TeamMemberId"] = new SelectList(_unitOfWork.TeamMembers.GetAllActive(), "Id", "Name", consultant.TeamMemberId);
             ViewData["ClientId"] = new SelectList(_unitOfWork.Clients.GetAllActive(), "Id", "ClientName", consultant.ClientId);
+            ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", consultant.CompanyId);
             return View(consultant);
         }
 

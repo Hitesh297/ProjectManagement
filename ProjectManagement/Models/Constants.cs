@@ -17,5 +17,17 @@
                 return YearDropdown;
             }
         }
+
+        public static List<Company> CompanyDropdown 
+        {
+            get
+            {
+                List<Company> companyList = new List<Company>();
+                companyList.Add(new Company() { Id = 1, Name = "Atlantis" });
+                companyList.Add(new Company() { Id = 2, Name = "Apptoza" });
+                return companyList;
+            }
+                }
     }
+
 }

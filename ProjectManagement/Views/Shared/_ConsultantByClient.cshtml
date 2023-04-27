@@ -13,12 +13,22 @@
         <div>
             <h2>Consultants by Client</h2>
         </div>
-        <div class="input-group" style="width:150px;">
-            <span class="input-group-text bg-dark fw-bold text-white border-dark" id="yearDropdownLable">Year</span>
-            <select name="consultantByClientYear" id="consultantByClientYear" class="form-select border-dark fw-bold" asp-items="ViewBag.Year">
-                
-            </select>
-        </div>
+        <ul style="list-style:none" class="list-group list-group-horizontal" id="consultantByClientFilters">
+            <li style="margin-right:10px">
+            <div class="input-group">
+                <span class="input-group-text bg-dark fw-bold text-white border-dark" id="companyDropdownLable">Company</span>
+                    <select onchange="addFilter()" name="consultantByClientCompany" id="consultantByClientCompany" class="form-select border-dark fw-bold" asp-items="ViewBag.CompanyList">
+                </select>
+            </div>
+            </li>
+            <li>
+            <div class="input-group" style="width:150px;">
+                <span class="input-group-text bg-dark fw-bold text-white border-dark" id="yearDropdownLable">Year</span>
+                <select onchange="addFilter()" name="consultantByClientYear" id="consultantByClientYear" class="form-select border-dark fw-bold" asp-items="ViewBag.Year">
+                </select>
+            </div>
+            </li>
+        </ul>
     </div>
     <div class="card-body table-responsive">
         @if (Model != null && Model.ClientByConsultantList.Count() != 0)
@@ -66,18 +76,21 @@
 
                 </tbody>
             </table>
-        } else
+        }
+        else
         {
             <p>No Data Found</p>
         }
     </div>
     <script type="text/javascript">
 
-        $('select[name="consultantByClientYear"]').change(function () {
+        function addFilter() {
             console.log('Test');
-            var year = $(this).val();
-            $('#ConsultantByClientPartial').load("/Dashboard/ConsultantByClientPartial?year=" + year);
-        });
+            var companyId = $('#consultantByClientCompany').val();
+            var year = $('#consultantByClientYear').val();
+            var companyId
+            $('#ConsultantByClientPartial').load("/Dashboard/ConsultantByClientPartial?year=" + year + "&companyId=" + companyId);
+        }
 
     </script>
 </section>

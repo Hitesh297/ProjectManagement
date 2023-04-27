@@ -18,6 +18,16 @@
         <div class="row g-3">
 
             <div class="col-12">
+                <div class="form-group input-group">
+                    <label asp-for="CompanyId" class="control-label input-group-text"></label>
+                    <select asp-for="CompanyId" class="form-select" asp-items="ViewBag.CompanyList">
+                        <option value="">Please Select</option>
+                    </select>
+                </div>
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group input-group ">
                     <label asp-for="Name" class="input-group-text control-label"></label>
