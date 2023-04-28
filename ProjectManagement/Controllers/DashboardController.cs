@@ -32,8 +32,8 @@ namespace ProjectManagement.Controllers
             dashboardVM.RevenueByClientVM.ClientByProfitList = new List<ClientProfitByMonth>();
 
             dashboardVM.ConsultantByClientVM = GetConsultantByClientVM(currentYear,defaultCompanyId);
-            dashboardVM.RevenueByRecruiterVM = GetRevenueByRecruiterVM(currentYear);
-            dashboardVM.RevenueByClientVM = GetRevenueByClientVM(currentYear);
+            dashboardVM.RevenueByRecruiterVM = GetRevenueByRecruiterVM(currentYear, defaultCompanyId);
+            dashboardVM.RevenueByClientVM = GetRevenueByClientVM(currentYear, defaultCompanyId);
 
             ViewData["Year"] = new SelectList(Constants.YearDropdown, currentYear);
             ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown,"Id","Name", defaultCompanyId);
@@ -52,14 +52,14 @@ namespace ProjectManagement.Controllers
         {
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
             ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", companyId);
-            return PartialView("_RevenueByRecruiter", GetRevenueByRecruiterVM(year));
+            return PartialView("_RevenueByRecruiter", GetRevenueByRecruiterVM(year, companyId));
         }
 
         public IActionResult RevenueByClientPartial(int year, int companyId)
         {
             ViewData["Year"] = new SelectList(Constants.YearDropdown, year);
             ViewData["CompanyList"] = new SelectList(Constants.CompanyDropdown, "Id", "Name", companyId);
-            return PartialView("_RevenueByClient", GetRevenueByClientVM(year));
+            return PartialView("_RevenueByClient", GetRevenueByClientVM(year, companyId));
         }
 
         #region Private Methods
@@ -84,14 +84,16 @@ namespace ProjectManagement.Controllers
             return consultantByClientVM;
         }
 
-        private RevenueByRecruiterVM GetRevenueByRecruiterVM(int year)
+        private RevenueByRecruiterVM GetRevenueByRecruiterVM(int year, int companyId)
         {
             RevenueByRecruiterVM revenueByRecruiterVM = new RevenueByRecruiterVM();
             ///Calculate Profit by Recruiter for each month
             var recruiterMonthlyData = _unitOfWork.MonthData
                 .GetAllIncluding(t => t.TimeSheet,
                 t => t.TimeSheet.Consultant.Recruiter)
-                .Where(x => x.Hours != null && x.Hours != 0).Where(y => y.TimeSheet.Year == year).ToList();
+                .Where(x => x.Hours != null && x.Hours != 0)
+                .Where(k=>k.TimeSheet.Consultant.CompanyId == companyId)
+                .Where(y => y.TimeSheet.Year == year).ToList();
 
             var recruiterResults = recruiterMonthlyData.GroupBy(n => new { n.TimeSheet.Consultant.Recruiter, n.MonthInt })
                 .Select(g => new RecruiterProfitByMonth
@@ -104,14 +106,16 @@ namespace ProjectManagement.Controllers
             return revenueByRecruiterVM;
         }
 
-        private RevenueByClientVM GetRevenueByClientVM(int year)
+        private RevenueByClientVM GetRevenueByClientVM(int year, int companyId)
         {
             RevenueByClientVM revenueByClientVM = new RevenueByClientVM();
             ///Calculate Profit by Client for each month
             var clientMonthlyData = _unitOfWork.MonthData
                 .GetAllIncluding(t => t.TimeSheet,
                 t => t.TimeSheet.Consultant.Client)
-                .Where(x => x.Hours != null && x.Hours != 0).Where(y => y.TimeSheet.Year == year).ToList();
+                .Where(x => x.Hours != null && x.Hours != 0)
+                .Where(k=>k.TimeSheet.Consultant.CompanyId == companyId)
+                .Where(y => y.TimeSheet.Year == year).ToList();
 
             var clientResults = clientMonthlyData.GroupBy(n => new { n.TimeSheet.Consultant.Client, n.MonthInt })
                 .Select(g => new ClientProfitByMonth

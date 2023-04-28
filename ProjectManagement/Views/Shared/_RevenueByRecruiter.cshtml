@@ -11,14 +11,24 @@
         <div>
             <h2>Revenue By Recruiter</h2>
         </div>
-        <div class="input-group" style="width:150px;">
-            <span class="input-group-text bg-dark fw-bold text-white border-dark" id="yearDropdownLable">Year</span>
-            <select name="revenueByRecruiterYear" id="revenueByRecruiterYear" class="form-select border-dark fw-bold" asp-items="ViewBag.Year">
-
-            </select>
-        </div>
+        <ul style="list-style:none" class="list-group list-group-horizontal" id="revenueByRecruiterFilters">
+            <li style="margin-right:10px">
+                <div class="input-group">
+                    <span class="input-group-text bg-dark fw-bold text-white border-dark">Company</span>
+                    <select onchange="RevenueByRecruiterFilter()" name="revenueByRecruiterCompany" id="revenueByRecruiterCompany" class="form-select border-dark fw-bold" asp-items="ViewBag.CompanyList">
+                    </select>
+                </div>
+            </li>
+            <li >
+                <div class="input-group" style="width:150px;">
+                    <span class="input-group-text bg-dark fw-bold text-white border-dark" id="yearDropdownLable">Year</span>
+                    <select onchange="RevenueByRecruiterFilter()" name="revenueByRecruiterYear" id="revenueByRecruiterYear" class="form-select border-dark fw-bold" asp-items="ViewBag.Year">
+                    </select>
+                </div>
+            </li>
+        </ul>
     </div>
-    
+
     <div class="card-body table-responsive">
         @if (Model != null && Model.RecruiterByProfitList.Count() != 0)
         {
@@ -75,11 +85,12 @@
     </div>
     <script type="text/javascript">
 
-        $('select[name="revenueByRecruiterYear"]').change(function () {
+        function RevenueByRecruiterFilter() {
             console.log('Test');
-            var year = $(this).val();
-            $('#RevenueByRecruiterPartial').load("/Dashboard/RevenueByRecruiterPartial?year=" + year);
-        });
+            var companyId = $('#revenueByRecruiterCompany').val();
+            var year = $('#revenueByRecruiterYear').val();
+            $('#RevenueByRecruiterPartial').load("/Dashboard/RevenueByRecruiterPartial?year=" + year + "&companyId=" + companyId);
+        }
 
     </script>
 </section>
