@@ -127,10 +127,10 @@
                         <div class="form-group input-group">
                             <label asp-for="TeamLeadMemberId" class="control-label input-group-text"></label>
                             <select asp-for="TeamLeadMemberId" class="form-select" asp-items="ViewBag.TeamLeadMemberId">
-                                <option>Please Select</option>
+                                <option value="">Please Select</option>
                             </select>
                         </div>
-                        <span asp-validation-for="TeamMemberId" class="text-danger"></span>
+                        <span asp-validation-for="TeamLeadMemberId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                         <div class="form-group input-group">
                             <label asp-for="MarketingManagerMemberId" class="control-label input-group-text"></label>
                             <select asp-for="MarketingManagerMemberId" class="form-select" asp-items="ViewBag.MarketingManagerMemberId">
-                                <option>Please Select</option>
+                                <option value="" >Please Select</option>
                             </select>
                         </div>
                         <span asp-validation-for="MarketingManagerMemberId" class="text-danger"></span>
@@ -173,7 +173,7 @@
                         <div class="form-group input-group">
                             <label asp-for="ReferredByMemberId" class="control-label input-group-text"></label>
                             <select asp-for="ReferredByMemberId" class="form-select" asp-items="ViewBag.ReferredByMemberId">
-                                <option>Please Select</option>
+                                <option value="">Please Select</option>
                             </select>
                         </div>
                         <span asp-validation-for="ReferredByMemberId" class="text-danger"></span>
@@ -199,7 +199,7 @@
                             @*<span class="input-group-text" id="basic-addon1">Year</span>*@
                             <label asp-for="PlacedByMemberId" class="input-group-text"></label>
                             <select asp-for="PlacedByMemberId" class="form-select" asp-items="ViewBag.PlacedByMemberId">
-                                <option>Please Select</option>
+                                <option value="">Please Select</option>
                             </select>
                         </div>
                         <span asp-validation-for="PlacedByMemberId" class="text-danger"></span>

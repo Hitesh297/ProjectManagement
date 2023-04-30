@@ -65,18 +65,18 @@ namespace ProjectManagement.Models
         [Display(Name = "Pay Rate")]
         public decimal PayRate { get; set; }
         [Display(Name = "Team Lead Fee")]
-        public decimal TeamLeadFee { get; set; }
+        public decimal? TeamLeadFee { get; set; }
         [Display(Name = "Marketing Fee")]
-        public decimal MarketingFee { get; set;}
+        public decimal? MarketingFee { get; set;}
         public TeamMember? MarketingManager { get; set; }
         [Display(Name = "Referral Fee")]
-        public decimal ReferralFees { get; set; }
+        public decimal? ReferralFees { get; set; }
         public TeamMember? ReferredBy { get; set; }
         [Display(Name = "Placement Fee")]
-        public decimal PlacementFee { get; set; }
+        public decimal? PlacementFee { get; set; }
         public TeamMember? PlacedBy { get; set; }
         [Display(Name = "Credit Card Cost")]
-        public decimal CreditCardCost { get; set; }
+        public decimal? CreditCardCost { get; set; }
         [Display(Name = "Net Margin")]
         public decimal NetMargin { get; set; }
 
