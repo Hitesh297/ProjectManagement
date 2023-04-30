@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
 using ProjectManagement.Data.UnitOfWorks;
@@ -331,20 +332,21 @@ namespace ProjectManagement.Controllers
                     {
                         //csv.Context.TypeConverterOptionsCache.GetOptions<DateTime>().NullValues.AddRange(new[] { "NULL", "0" });
                         csv.Context.TypeConverterOptionsCache.GetOptions<decimal?>().NullValues.Add("0");
+                        csv.Context.RegisterClassMap<TimesheetCsvMap>();
 
                         var records = csv.GetRecords<TimesheetCsv>();
                         foreach (var record in records)
                         {
-                            
+
                             Consultant consultant = _unitOfWork.Consultants.GetAll().Where(x => x.UniqueConsultantId == record.UniqueConsultantId).FirstOrDefault();
                             if (consultant == null)
                             {
                                 return NotFound($"Consultant with Id {record.UniqueConsultantId} not found! ");
                             }
 
-                            TimeSheet timeSheet = _unitOfWork.TimeSheets.GetAllIncluding(x=>x.MonthData)
+                            TimeSheet timeSheet = _unitOfWork.TimeSheets.GetAllIncluding(x => x.MonthData)
                                 .Where(x => x.ConsultantId == consultant.Id)
-                                .Where(y=>y.Year == record.Year).FirstOrDefault();
+                                .Where(y => y.Year == record.Year).FirstOrDefault();
 
 
                             if (timeSheet == null)
@@ -364,9 +366,14 @@ namespace ProjectManagement.Controllers
                                             Hours = record.Hours,
                                             PaidAmount = record.PaidAmount,
                                             MonthInt = record.MonthNumber,
-                                            Month = DateTimeFormatInfo.CurrentInfo.GetMonthName(record.MonthNumber)
+                                            Month = DateTimeFormatInfo.CurrentInfo.GetMonthName(record.MonthNumber),
+                                            InvoiceAmount = consultant.BillingRate * record.Hours,
+                                            ConsultantPay = consultant.PayRate * record.Hours,
+                                            Variation = record.Variation,
+                                            NetProfit = consultant.NetMargin * record.Hours
+
                                         };
-                                        timeSheet.MonthData.Add(monthData); 
+                                        timeSheet.MonthData.Add(monthData);
                                     }
                                     else
                                     {
@@ -379,17 +386,22 @@ namespace ProjectManagement.Controllers
                             }
                             else
                             {
-                               var existingMonthData = timeSheet.MonthData
-                                    .Where(x => x.MonthInt == record.MonthNumber)
-                                    .FirstOrDefault();
-                                if(existingMonthData == null)
+                                var existingMonthData = timeSheet.MonthData
+                                     .Where(x => x.MonthInt == record.MonthNumber)
+                                     .FirstOrDefault();
+                                if (existingMonthData == null)
                                 {
                                     MonthData monthData = new MonthData()
                                     {
                                         Hours = record.Hours,
                                         PaidAmount = record.PaidAmount,
                                         MonthInt = record.MonthNumber,
-                                        TimesheetId = timeSheet.Id
+                                        TimesheetId = timeSheet.Id,
+                                        InvoiceAmount = consultant.BillingRate * record.Hours,
+                                        ConsultantPay = consultant.PayRate * record.Hours,
+                                        Variation = record.Variation,
+                                        NetProfit = consultant.NetMargin * record.Hours
+
                                     };
                                     timeSheet.MonthData.Add(monthData);
                                 }
@@ -397,19 +409,23 @@ namespace ProjectManagement.Controllers
                                 {
                                     existingMonthData.Hours = record.Hours;
                                     existingMonthData.PaidAmount = record.PaidAmount;
+                                    existingMonthData.InvoiceAmount = consultant.BillingRate * record.Hours;
+                                    existingMonthData.ConsultantPay = consultant.PayRate * record.Hours;
+                                    existingMonthData.Variation = record.Variation;
+                                    existingMonthData.NetProfit = consultant.NetMargin * record.Hours;
                                 }
                                 _unitOfWork.TimeSheets.Update(timeSheet);
                             }
 
                         }
                     }
-                    
-                    
+
+
                     await _unitOfWork.Complete();
                 }
                 else
                 {
-                    ViewData["ConsultantsUploadError"] = "Please select a file with .csv extension";
+                    return Problem("Please select a file with .csv extension");
                 }
 
             }
