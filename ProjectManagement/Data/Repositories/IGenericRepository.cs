@@ -13,7 +13,8 @@ namespace ProjectManagement.Data.Repositories
         Task<IEnumerable<T>> GetAllAsync();
         void Add(T entity);
         void Update(T entity);
-        //void AddRange(IEnumerable<T> entities);
+        void AddRange(IEnumerable<T> entities);
+        void UpdateRange(IEnumerable<T> entities);
         void Remove(T entity);
         //void RemoveRange(IEnumerable<T> entities);
         IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);

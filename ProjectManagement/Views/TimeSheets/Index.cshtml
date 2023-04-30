@@ -9,7 +9,24 @@
 <div class="d-flex justify-content-between align-items-center pb-3">
     <a asp-action="Create">Create New</a>
     <div>
-        <input id="ExportToCSV" type="submit" value="Export" class="btn btn-success" />
+        <ul style="list-style:none" class="list-group list-group-horizontal" id="consultantByClientFilters">
+            <li style="margin-right:10px">
+                <input id="TemplateCSV" type="submit" value="Import Template" class="btn btn-success" />
+            </li>
+            <li style="margin-right:10px">
+                <label class="btn btn-success">
+                    <form id="importForm" asp-action="ImportTimesheet" method="post" enctype="multipart/form-data">
+                        Import <input id="ImportCSV" type="file" name="file" hidden />
+                    </form>
+                </label>
+            </li>
+            <li>
+                <div class="input-group">
+                    <input id="ExportToCSV" type="submit" value="Export" class="btn btn-success" />
+                </div>
+            </li>
+        </ul>
+
     </div>
 </div>
 
@@ -103,6 +120,41 @@
                 var url = '@Url.Action("ExportAsCSV", "TimeSheets")' + '/' + consultantId + '/' + year;
                 window.location.href = url;
 
+            });
+
+            $("#TemplateCSV").click(function () {
+                var url = '@Url.Action("DownloadImportTemplate", "TimeSheets")';
+                window.location.href = url;
+
+            });
+            $("#ImportCSV").on("change", function () {
+                $("#importForm").submit();
+            });
+
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var formAction = $(this).attr("action");
+
+                var files = $('#ImportCSV').prop("files");
+                var fdata = new FormData();
+
+                fdata.append("file", files[0]);
+
+                $.ajax({
+                    type: 'post',
+                    url: formAction,
+                    data: fdata,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (msg) {
+                        alert(msg);
+                    },
+                    error: function (msg) {
+                        console.log(msg.responseJSON);
+                        alert(msg.responseJSON.detail);
+                    }
+                });
             });
         });
     </script>

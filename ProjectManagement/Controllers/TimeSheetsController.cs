@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Formats.Asn1;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
 using ProjectManagement.Data.UnitOfWorks;
 using ProjectManagement.Models;
+using ProjectManagement.Models.Utilities;
 using ProjectManagement.Models.ViewModels;
 
 namespace ProjectManagement.Controllers
@@ -252,26 +255,170 @@ namespace ProjectManagement.Controllers
 
             var timeSheets = applicationDbContext.Include(x => x.MonthData).OrderBy(x => x.ConsultantId).OrderBy(y => y.Year).ToList();
             StringBuilder sb = new StringBuilder();
+            var records = new List<dynamic>();
+
             if (timeSheets.Count != 0)
             {
-                sb.Append($"Consultant Id,Consultant Name,Year");
-                foreach (var month in timeSheets[0].MonthData)
+                foreach (var timeSheet in timeSheets)
                 {
-                    sb.Append($",{month.Month}");
+                    dynamic record = new ExpandoObject();
+                    record.UniqueConsultantId = timeSheet.Consultant.UniqueConsultantId;
+                    record.ConsultantName = timeSheet.Consultant.Name;
+                    record.Year = timeSheet.Year;
+                    record.January = timeSheet.MonthData?.Where(x => x.MonthInt == 1).FirstOrDefault()?.Hours;
+                    record.February = timeSheet.MonthData?.Where(x => x.MonthInt == 2).FirstOrDefault()?.Hours;
+                    record.March = timeSheet.MonthData?.Where(x => x.MonthInt == 3).FirstOrDefault()?.Hours;
+                    record.April = timeSheet.MonthData?.Where(x => x.MonthInt == 4).FirstOrDefault()?.Hours;
+                    record.May = timeSheet.MonthData?.Where(x => x.MonthInt == 5).FirstOrDefault()?.Hours;
+                    record.June = timeSheet.MonthData?.Where(x => x.MonthInt == 6).FirstOrDefault()?.Hours;
+                    record.July = timeSheet.MonthData?.Where(x => x.MonthInt == 7).FirstOrDefault()?.Hours;
+                    record.August = timeSheet.MonthData?.Where(x => x.MonthInt == 8).FirstOrDefault()?.Hours;
+                    record.September = timeSheet.MonthData?.Where(x => x.MonthInt == 9).FirstOrDefault()?.Hours;
+                    record.October = timeSheet.MonthData?.Where(x => x.MonthInt == 10).FirstOrDefault()?.Hours;
+                    record.November = timeSheet.MonthData?.Where(x => x.MonthInt == 11).FirstOrDefault()?.Hours;
+                    record.December = timeSheet.MonthData?.Where(x => x.MonthInt == 12).FirstOrDefault()?.Hours;
+                    records.Add(record);
                 }
-                sb.Append("\r\n");
-                foreach (var item in timeSheets)
+
+                using (var writer = new StringWriter())
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    sb.Append($"{item.Consultant.UniqueConsultantId},{item.Consultant.Name},{item.Year}");
-                    foreach (var timesheet in item.MonthData)
-                    {
-                        sb.Append($",{timesheet.Hours}");
-                    }
-                    sb.Append("\r\n");
+                    csv.WriteRecords(records);
+
+                    return File(Encoding.UTF8.GetBytes(writer.ToString()), "text/csv", "TimeSheets.csv");
                 }
             }
 
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "TimeSheets.csv");
+            return View("Error");
+        }
+
+        [HttpGet]
+        public IActionResult DownloadImportTemplate()
+        {
+            var records = new List<dynamic>();
+
+            dynamic record = new ExpandoObject();
+            record.UniqueConsultantId = "";
+            record.ConsultantName = "";
+            record.Hours = "";
+            record.PaidAmount = "";
+            record.MonthNumber = "";
+            record.Year = "";
+            records.Add(record);
+
+            using (var writer = new StringWriter())
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(records);
+
+                return File(Encoding.UTF8.GetBytes(writer.ToString()), "text/csv", "Import Template.csv");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportTimesheet(IFormFile file)
+        {
+            try
+            {
+                var fileextension = Path.GetExtension(file.FileName);
+
+                if (fileextension == ".csv")
+                {
+                    List<Consultant> newConsultants = new List<Consultant>();
+                    List<Consultant> existingConsultants = new List<Consultant>();
+                    using (var reader = new StreamReader(file.OpenReadStream()))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        //csv.Context.TypeConverterOptionsCache.GetOptions<DateTime>().NullValues.AddRange(new[] { "NULL", "0" });
+                        csv.Context.TypeConverterOptionsCache.GetOptions<decimal?>().NullValues.Add("0");
+
+                        var records = csv.GetRecords<TimesheetCsv>();
+                        foreach (var record in records)
+                        {
+                            
+                            Consultant consultant = _unitOfWork.Consultants.GetAll().Where(x => x.UniqueConsultantId == record.UniqueConsultantId).FirstOrDefault();
+                            if (consultant == null)
+                            {
+                                return NotFound($"Consultant with Id {record.UniqueConsultantId} not found! ");
+                            }
+
+                            TimeSheet timeSheet = _unitOfWork.TimeSheets.GetAllIncluding(x=>x.MonthData)
+                                .Where(x => x.ConsultantId == consultant.Id)
+                                .Where(y=>y.Year == record.Year).FirstOrDefault();
+
+
+                            if (timeSheet == null)
+                            {
+                                timeSheet = new TimeSheet()
+                                {
+                                    ConsultantId = consultant.Id,
+                                    Year = record.Year
+                                };
+                                timeSheet.MonthData = new List<MonthData>();
+                                for (int i = 1; i <= 12; i++)
+                                {
+                                    if (i == record.MonthNumber)
+                                    {
+                                        MonthData monthData = new MonthData()
+                                        {
+                                            Hours = record.Hours,
+                                            PaidAmount = record.PaidAmount,
+                                            MonthInt = record.MonthNumber,
+                                            Month = DateTimeFormatInfo.CurrentInfo.GetMonthName(record.MonthNumber)
+                                        };
+                                        timeSheet.MonthData.Add(monthData); 
+                                    }
+                                    else
+                                    {
+                                        var monthdata = new MonthData() { Month = DateTimeFormatInfo.CurrentInfo.GetMonthName(i), MonthInt = i };
+                                        timeSheet.MonthData.Add(monthdata);
+                                    }
+                                }
+                                _unitOfWork.TimeSheets.Add(timeSheet);
+                                await _unitOfWork.Complete();
+                            }
+                            else
+                            {
+                               var existingMonthData = timeSheet.MonthData
+                                    .Where(x => x.MonthInt == record.MonthNumber)
+                                    .FirstOrDefault();
+                                if(existingMonthData == null)
+                                {
+                                    MonthData monthData = new MonthData()
+                                    {
+                                        Hours = record.Hours,
+                                        PaidAmount = record.PaidAmount,
+                                        MonthInt = record.MonthNumber,
+                                        TimesheetId = timeSheet.Id
+                                    };
+                                    timeSheet.MonthData.Add(monthData);
+                                }
+                                else
+                                {
+                                    existingMonthData.Hours = record.Hours;
+                                    existingMonthData.PaidAmount = record.PaidAmount;
+                                }
+                                _unitOfWork.TimeSheets.Update(timeSheet);
+                            }
+
+                        }
+                    }
+                    
+                    
+                    await _unitOfWork.Complete();
+                }
+                else
+                {
+                    ViewData["ConsultantsUploadError"] = "Please select a file with .csv extension";
+                }
+
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            //return View("LoadData");
+            return Ok("Upload Complete");
         }
     }
 }

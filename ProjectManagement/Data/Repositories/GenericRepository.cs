@@ -23,10 +23,15 @@ namespace ProjectManagement.Data.Repositories
             _context.Set<T>().Update(entity);
         }
 
-        //public void AddRange(IEnumerable<T> entities)
-        //{
-        //    _context.Set<T>().AddRange(entities);
-        //}
+        public void AddRange(IEnumerable<T> entities)
+        {
+            _context.Set<T>().AddRange(entities);
+        }
+
+        public void UpdateRange(IEnumerable<T> entities)
+        {
+            _context.Set<T>().UpdateRange(entities);
+        }
 
         public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
         {
