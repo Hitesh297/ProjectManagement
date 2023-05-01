@@ -361,18 +361,20 @@ namespace ProjectManagement.Controllers
                                 {
                                     if (i == record.MonthNumber)
                                     {
-                                        MonthData monthData = new MonthData()
-                                        {
-                                            Hours = record.Hours,
-                                            PaidAmount = record.PaidAmount,
-                                            MonthInt = record.MonthNumber,
-                                            Month = DateTimeFormatInfo.CurrentInfo.GetMonthName(record.MonthNumber),
-                                            InvoiceAmount = consultant.BillingRate * record.Hours,
-                                            ConsultantPay = consultant.PayRate * record.Hours,
-                                            Variation = record.Variation,
-                                            NetProfit = consultant.NetMargin * record.Hours
+                                        MonthData monthData = new MonthData();
 
-                                        };
+                                        monthData.Hours = record.Hours;
+                                        monthData.PaidAmount = record.PaidAmount;
+                                        monthData.MonthInt = record.MonthNumber;
+                                        monthData.TimesheetId = timeSheet.Id;
+                                        monthData.InvoiceAmount = consultant.BillingRate * record.Hours;
+
+                                        record.ConsultantPay = consultant.PayRate * record.Hours;
+
+                                        monthData.ConsultantPay = record.ConsultantPay;
+                                        monthData.Variation = record.Variation;
+                                        monthData.NetProfit = consultant.NetMargin * record.Hours;
+
                                         timeSheet.MonthData.Add(monthData);
                                     }
                                     else
@@ -391,18 +393,20 @@ namespace ProjectManagement.Controllers
                                      .FirstOrDefault();
                                 if (existingMonthData == null)
                                 {
-                                    MonthData monthData = new MonthData()
-                                    {
-                                        Hours = record.Hours,
-                                        PaidAmount = record.PaidAmount,
-                                        MonthInt = record.MonthNumber,
-                                        TimesheetId = timeSheet.Id,
-                                        InvoiceAmount = consultant.BillingRate * record.Hours,
-                                        ConsultantPay = consultant.PayRate * record.Hours,
-                                        Variation = record.Variation,
-                                        NetProfit = consultant.NetMargin * record.Hours
+                                    MonthData monthData = new MonthData();
 
-                                    };
+                                    monthData.Hours = record.Hours;
+                                    monthData.PaidAmount = record.PaidAmount;
+                                    monthData.MonthInt = record.MonthNumber;
+                                    monthData.TimesheetId = timeSheet.Id;
+                                    monthData.InvoiceAmount = consultant.BillingRate * record.Hours;
+
+                                    record.ConsultantPay = consultant.PayRate * record.Hours;
+
+                                    monthData.ConsultantPay = record.ConsultantPay;
+                                    monthData.Variation = record.Variation;
+                                    monthData.NetProfit = consultant.NetMargin * record.Hours;
+
                                     timeSheet.MonthData.Add(monthData);
                                 }
                                 else
@@ -410,7 +414,10 @@ namespace ProjectManagement.Controllers
                                     existingMonthData.Hours = record.Hours;
                                     existingMonthData.PaidAmount = record.PaidAmount;
                                     existingMonthData.InvoiceAmount = consultant.BillingRate * record.Hours;
-                                    existingMonthData.ConsultantPay = consultant.PayRate * record.Hours;
+
+                                    record.ConsultantPay = consultant.PayRate * record.Hours;
+
+                                    existingMonthData.ConsultantPay = record.ConsultantPay;
                                     existingMonthData.Variation = record.Variation;
                                     existingMonthData.NetProfit = consultant.NetMargin * record.Hours;
                                 }

@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using ProjectManagement.Data.UnitOfWorks;
 using ProjectManagement.Models;
 using ProjectManagement.Models.Utilities;
+using System.Data;
 using System.Diagnostics;
 using System.Formats.Asn1;
 using System.Globalization;
@@ -28,12 +29,14 @@ namespace ProjectManagement.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult LoadData()
 
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> LoadTeamMembersFromFile(IFormFile file)
         {
