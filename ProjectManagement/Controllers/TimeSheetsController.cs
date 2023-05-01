@@ -338,10 +338,11 @@ namespace ProjectManagement.Controllers
                         foreach (var record in records)
                         {
 
+                            if (record.MonthNumber > 12) return Problem($"Invalid Month [{record.MonthNumber}] Found!"); ;
                             Consultant consultant = _unitOfWork.Consultants.GetAll().Where(x => x.UniqueConsultantId == record.UniqueConsultantId).FirstOrDefault();
                             if (consultant == null)
                             {
-                                return NotFound($"Consultant with Id {record.UniqueConsultantId} not found! ");
+                                return Problem($"Consultant with Id {record.UniqueConsultantId} not found! ");
                             }
 
                             TimeSheet timeSheet = _unitOfWork.TimeSheets.GetAllIncluding(x => x.MonthData)
